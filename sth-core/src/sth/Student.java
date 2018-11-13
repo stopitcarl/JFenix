@@ -2,6 +2,8 @@ package sth;
 
 import java.util.*;
 
+import javax.security.auth.Subject;
+
 public class Student extends Person {
 	private List<Subject> _subjects;
 	private Representative _representative;
@@ -10,6 +12,11 @@ public class Student extends Person {
 		// TODO Auto-generated constructor stub
 	}
 	
+	public void addSubjects(Subject subject){
+		if(!_subjects.contains(subject))
+			_subjects.add(subject);
+	}
+
 	public void submitSurv(Answer answer, Survey s) {
 		
 	}

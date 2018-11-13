@@ -19,7 +19,8 @@ import sth.exceptions.NoSuchPersonIdException;
 public class School implements Serializable {
 	private List<Course> _courses;
 	private List<Professor> _professors;
-	private List<Administrative> _administrative;
+	private List<Administrative> _administratives;
+	
 	private Student _student;
 	private Professor _Professor;
 
@@ -52,7 +53,7 @@ public class School implements Serializable {
 
 	private void registerFromFields(String[] fields) throws Exception { // TODO: Different Exceptions
 		// Regular expression pattern to match an agent.
-		Pattern patPerson = Pattern.compile("^(ALUNO|DELEGADO|DOCENTE|FUNCIONÃ�RIO)");
+		Pattern patPerson = Pattern.compile("^(ALUNO|DELEGADO|DOCENTE|FUNCIONÁRIO)");
 		Pattern patSubject = Pattern.compile("^(#)");
 
 		if (patPerson.matcher(fields[0]).matches()) {
@@ -88,7 +89,7 @@ public class School implements Serializable {
 		} else if (fields[0].equals("DOCENTE")) {
 			Professor student = new Professor(id, name, phoneNum);
 			// registerNewStudent()
-		} else if (fields[0].equals("FUNCIONÃ�RIO")) {
+		} else if (fields[0].equals("FUNCIONÁRIO")) {
 			Administrative student = new Administrative(id, name, phoneNum);
 			// registerNewStudent()
 		}
