@@ -10,6 +10,16 @@ public class Professor extends Person {
 		// TODO Auto-generated constructor stub
 	}
 
+	public void addSubjects(Subject subject){
+		if(!_subjects.contains(subject))
+			_subjects.add(subject);
+	}
+
+	public void addCourses(Course course){
+		if(!_courses.contains(course))
+			_courses.add(course);
+	}
+
 	public void createProject(Subject s, String name) {
 		
 	}

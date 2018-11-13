@@ -22,7 +22,7 @@ public class School implements Serializable {
 	private List<Administrative> _administratives;
 	
 	private Student _student;
-	private Professor _Professor;
+	private Professor _professor;
 
 	/** Serial number for serialization. */
 	private static final long serialVersionUID = 201810051538L;
@@ -37,6 +37,7 @@ public class School implements Serializable {
 	 * @throws IOException
 	 */
 	void importFile(String filename) throws IOException, BadEntryException { // TODO: Throw apropriate exceptions
+		System.out.println("importing file");
 		BufferedReader reader = new BufferedReader(new FileReader(filename));
 		String line;
 		while ((line = reader.readLine()) != null) {
@@ -52,6 +53,7 @@ public class School implements Serializable {
 	}
 
 	private void registerFromFields(String[] fields) throws Exception { // TODO: Different Exceptions
+		System.out.println(fields);
 		// Regular expression pattern to match an agent.
 		Pattern patPerson = Pattern.compile("^(ALUNO|DELEGADO|DOCENTE|FUNCIONÁRIO)");
 		Pattern patSubject = Pattern.compile("^(#)");
@@ -72,7 +74,7 @@ public class School implements Serializable {
 		// Arg check
 		for (String s : fields)
 			if (s == null)
-				throw new Exception();
+				throw new BadEntryException();
 
 		// Read fields
 		int id = Integer.parseInt(fields[1]);
@@ -84,22 +86,23 @@ public class School implements Serializable {
 			Student student = new Student(id, name, phoneNum);
 			Representative rep = new Representative(id);
 		} else if (fields[0].equals("ALUNO")) {
-			Student student = new Student(id, name, phoneNum);
+			_student = new Student(id, name, phoneNum);
 			// registerNewStudent()
 		} else if (fields[0].equals("DOCENTE")) {
-			Professor student = new Professor(id, name, phoneNum);
+			_professor = new Professor(id, name, phoneNum);
 			// registerNewStudent()
 		} else if (fields[0].equals("FUNCIONÁRIO")) {
-			Administrative student = new Administrative(id, name, phoneNum);
-			// registerNewStudent()
+			_administratives.add(new Administrative(id, name, phoneNum));			
+		} else{
+			throw new BadEntryException(fields[0]);
 		}
 	}
 
-	private void registerSubject(String[] fields) throws Exception { // TODO: fix this exception
+	private void registerSubject(String[] fields) throws BadEntryException { // TODO: fix this exception
 		// Arg check
 		for (String s : fields)
 			if (s == null)
-				throw new Exception();
+				throw new BadEntryException();
 
 		Course course;
 		Subject subject;
