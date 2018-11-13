@@ -11,7 +11,7 @@ import sth.exceptions.InvalidCourseSelectionException;
 import sth.exceptions.NoSuchPersonIdException;
 
 
-//FIXME import other classes if neededededed
+//FIXME import other classes if needed
 
 /**
  * School implementation.
