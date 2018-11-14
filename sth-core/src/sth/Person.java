@@ -1,6 +1,6 @@
 package sth;
 
-import java.util.*;
+import java.util.ArrayList;
 
 import javax.management.Notification;
 
@@ -8,7 +8,7 @@ public abstract class Person {
 	private String _name;
 	private String _phoneNum;
 	private int _id;
-	private List < Notification > _notifications;
+	private ArrayList < Notification > _notifications;
 
 	public Person(int id, String name, String phoneNum) {		
 		_id = id;
@@ -26,12 +26,6 @@ public abstract class Person {
 	public String getPhoneNumber() {
 		return _phoneNum;
 	}
-<<<<<<< Updated upstream
-}
-=======
 
-	void setPhoneNumber(String newNumber) {
-		_phoneNum = newNumber;
-	}
 }
->>>>>>> Stashed changes
+

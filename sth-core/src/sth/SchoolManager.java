@@ -96,7 +96,7 @@ public class SchoolManager {
 		_user.setPhoneNumber(num);
 	}
 
-	public List<Person> searchPerson(String name) { // TODO: is this a supposed to be a list?
+	public List<Person> searchPerson(String name) {
 		return null;
 	}
 
