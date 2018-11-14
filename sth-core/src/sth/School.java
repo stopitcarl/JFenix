@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.Serializable;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.regex.*;
 import sth.exceptions.BadEntryException;
@@ -23,6 +24,7 @@ public class School implements Serializable {
 	
 	private Student _student;
 	private Professor _professor;
+	private Representative _rep;
 
 	/** Serial number for serialization. */
 	private static final long serialVersionUID = 201810051538L;
@@ -36,23 +38,27 @@ public class School implements Serializable {
 	 * @throws BadEntryException
 	 * @throws IOException
 	 */
-	void importFile(String filename) throws IOException, BadEntryException { // TODO: Throw apropriate exceptions
+	void importFile(String filename) throws IOException, BadEntryException, FileNotFoundException { // TODO: Throw apropriate exceptions
 		System.out.println("importing file");
-		BufferedReader reader = new BufferedReader(new FileReader(filename));
-		String line;
-		while ((line = reader.readLine()) != null) {
-			String[] fields = line.split("\\|");
-			try {
+		BufferedReader reader = new BufferedReader(new FileReader(filename)); // TODO: see if this throws FileNotFoundException  
+		String line;		
+		try {		
+			while ((line = reader.readLine()) != null) {			
+				String[] fields = line.split("\\|");
 				registerFromFields(fields);
-			} catch (Exception e) {
-				System.err.printf("WARNING: unknown data %s\n", e.getMessage());
-				e.printStackTrace();
 			}
-		}
-		reader.close();
+		} catch (FileNotFoundException fnfe) {	
+			throw fnfe;
+		} catch (BadEntryException bex) {	
+			throw bex;
+		} catch (IOException e) {
+			throw e;
+		} 
+		reader.close();		
 	}
+	
 
-	private void registerFromFields(String[] fields) throws Exception { // TODO: Different Exceptions
+	private void registerFromFields(String[] fields) throws BadEntryException { // TODO: Different Exceptions
 		System.out.println(fields);
 		// Regular expression pattern to match an agent.
 		Pattern patPerson = Pattern.compile("^(ALUNO|DELEGADO|DOCENTE|FUNCIONÁRIO)");
@@ -70,11 +76,15 @@ public class School implements Serializable {
 			 */
 	}
 
-	private void registerPerson(String[] fields) throws Exception { // TODO: find good exception
+	private void registerPerson(String[] fields) throws BadEntryException { // TODO: find suitable exception
+		_professor = null;
+		_student = null;
+		_rep = null;
+		
 		// Arg check
 		for (String s : fields)
 			if (s == null)
-				throw new BadEntryException();
+				throw new BadEntryException(fields[0]);
 
 		// Read fields
 		int id = Integer.parseInt(fields[1]);
@@ -83,8 +93,8 @@ public class School implements Serializable {
 
 		// Create objects
 		if (fields[0].equals("DELEGADO")) {
-			Student student = new Student(id, name, phoneNum);
-			Representative rep = new Representative(id);
+			_student = new Student(id, name, phoneNum);
+			_rep = new Representative(id);
 		} else if (fields[0].equals("ALUNO")) {
 			_student = new Student(id, name, phoneNum);
 			// registerNewStudent()
@@ -102,17 +112,33 @@ public class School implements Serializable {
 		// Arg check
 		for (String s : fields)
 			if (s == null)
-				throw new BadEntryException();
+				throw new BadEntryException(fields[0]);
 
 		Course course;
 		Subject subject;
+
+		// Create course if none exists
 		if ((course = searchCourse(fields[0])) == null)
 			course = new Course(fields[0]);
 
+		// Create subject if none exists in that course
 		if ((subject = searchSubject(course, fields[1])) == null)
 			subject = new Subject(fields[1]);
 
 		course.addSubject(subject);
+
+		if(_rep != null) {
+			course.addRepresentative(_rep);
+			_rep = null;
+		}
+
+		if(_student != null) {
+			course.addStudent(_student);
+			_student.addSubject(subject);		
+		} else if(_professor != null){
+			_professor.addCourse(course);
+			_professor.addSubject(subject);
+		}
 	}
 
 	private void addStudentToCourse(Course c) {

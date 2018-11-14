@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import pt.tecnico.po.ui.Command;
 import pt.tecnico.po.ui.Input;
+import sth.exceptions.ImportFileException;
 import sth.SchoolManager;
 
 //FIXME import other classes if needed
@@ -15,27 +16,25 @@ import sth.SchoolManager;
 public class DoOpen extends Command<SchoolManager> {
 
 	// FIXME add input fields if needed
+	Input<String> _fileName;
 
 	/**
 	 * @param receiver
 	 */
 	public DoOpen(SchoolManager receiver) {
 		super(Label.OPEN, receiver);
-		// FIXME initialize input fields if needed
+		_fileName = _form.addStringInput(Message.openFile());		
 	}
 
 	/** @see pt.tecnico.po.ui.Command#execute() */
 	@Override
 	public final void execute() {
+		_form.parse();
 		try {
-			// FIXME implement command
-			if (1 == 1)
-				throw new FileNotFoundException();
-			else
-				throw new ClassNotFoundException();
+			 _receiver.importNewFile(_fileName.value());
 		} catch (FileNotFoundException fnfe) {
 			_display.popup(Message.fileNotFound());
-		} catch (ClassNotFoundException | IOException e) {
+		} catch (ImportFileException e) {
 			e.printStackTrace();
 		}
 	}

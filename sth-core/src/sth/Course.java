@@ -27,7 +27,7 @@ public class Course {
 	public void addSubject(Subject s) {
 	}
 
-	public void addRepresentative(Student s) {
+	public void addRepresentative(Representative s) {
 	}
 
 	public void removeRepresentative(Student s) {

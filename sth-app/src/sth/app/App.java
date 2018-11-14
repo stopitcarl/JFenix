@@ -2,6 +2,7 @@ package sth.app;
 
 import static pt.tecnico.po.ui.Dialog.IO;
 
+import java.io.FileNotFoundException;
 import pt.tecnico.po.ui.DialogException;
 import pt.tecnico.po.ui.Menu;
 import sth.SchoolManager;
@@ -22,7 +23,7 @@ public class App {
     String datafile = System.getProperty("import"); //$NON-NLS-1$
     if (datafile != null) {
       try {
-        school.importFile(datafile);
+        school.importFile(datafile);      
       } catch (ImportFileException e) {
         // no behavior described: just present the problem
         e.printStackTrace();

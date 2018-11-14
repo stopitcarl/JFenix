@@ -2,6 +2,7 @@ package sth;
 
 import java.util.*;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import sth.exceptions.BadEntryException;
 import sth.exceptions.ImportFileException;
 import sth.exceptions.NoSuchPersonIdException;
@@ -27,6 +28,21 @@ public class SchoolManager {
 	public void importFile(String datafile) throws ImportFileException {
 		try {
 			_school.importFile(datafile);
+		} catch (IOException | BadEntryException e) {
+			throw new ImportFileException(e);
+		}
+	}
+
+	/**
+	 * @param datafile
+	 * @throws ImportFileException
+	 * @throws InvalidCourseSelectionException
+	 */
+	public void importNewFile(String datafile) throws FileNotFoundException, ImportFileException {
+		try {
+			_school.importFile(datafile);
+		} catch (FileNotFoundException ex) {
+			throw ex;
 		} catch (IOException | BadEntryException e) {
 			throw new ImportFileException(e);
 		}
