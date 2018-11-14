@@ -24,10 +24,10 @@ public class Professor extends Person {
 	}
 
 	public void createProject(Subject s, String name) {
-		
+		s.addProject(name);
 	}
 	
 	public void closeProject(Subject s, String name) {
-		
+		s.closeProject(name);
 	}
 }

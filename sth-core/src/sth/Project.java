@@ -9,8 +9,18 @@ public class Project {
 	private Map<Student, String> _submission;
 	private Survey _survey;
 	
-	public Project() {
+	public Project(String name) {
 		// TODO Auto-generated constructor stub
+		_name = name;
+		_isOpen = true;
+	}
+
+	public String getName() {
+		return _name;
+	}
+
+	public void closeProject() {
+		_isOpen = false;
 	}
 
 	public void addNotifications(Notification n) {

@@ -26,4 +26,12 @@ public abstract class Person {
 	public String getPhoneNumber() {
 		return _phoneNum;
 	}
+<<<<<<< Updated upstream
 }
+=======
+
+	void setPhoneNumber(String newNumber) {
+		_phoneNum = newNumber;
+	}
+}
+>>>>>>> Stashed changes
