@@ -4,10 +4,11 @@ import java.util.*;
 
 public class Student extends Person {
 	private List<Subject> _subjects;
-	private Representative _representative;
+	// private Representative _representative; // TODO: delete this
 	
 	public Student(int id, String name, String phoneNumber) {
-		// TODO Auto-generated constructor stub
+		super(id, name, phoneNumber);
+		_subjects = new ArrayList<Subject>();		
 	}
 	
 	public void addSubject(Subject subject){

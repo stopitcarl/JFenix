@@ -8,7 +8,6 @@ import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.regex.*;
 import sth.exceptions.BadEntryException;
-import sth.exceptions.InvalidCourseSelectionException;
 import sth.exceptions.NoSuchPersonIdException;
 
 

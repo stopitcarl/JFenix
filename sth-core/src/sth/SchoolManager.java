@@ -19,6 +19,9 @@ public class SchoolManager {
 	private Person _user;
 
 	// FIXME implement constructors if needed
+	public SchoolManager(){
+		_school = new School();
+	}
 
 	/**
 	 * @param datafile
@@ -89,11 +92,11 @@ public class SchoolManager {
 	}
 
 	// FIXME implement other methods (in general, one for each command in sth-app)
-	public void changePhoneNumber(String num) {
-
+	public void changePhoneNumber(String num) {		
+		_user.setPhoneNumber(num);
 	}
 
-	public Person searchPerson(String name) {
+	public List<Person> searchPerson(String name) { // TODO: is this a supposed to be a list?
 		return null;
 	}
 

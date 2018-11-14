@@ -10,15 +10,15 @@ import sth.SchoolManager;
  * 4.2.2. Change phone number.
  */
 public class DoChangePhoneNumber extends Command<SchoolManager> {
-
-  //FIXME add input fields if needed
+  
+  Input<String> _phoneNum;
 
   /**
    * @param receiver
    */
   public DoChangePhoneNumber(SchoolManager receiver) {
-    super(Label.CHANGE_PHONE_NUMBER, receiver);
-    //FIXME initialize input fields if needed
+    super(Label.CHANGE_PHONE_NUMBER, receiver);    
+    _phoneNum = _form.addStringInput(Message.requestPhoneNumber());
   }
 
   /** @see pt.tecnico.po.ui.Command#execute() */

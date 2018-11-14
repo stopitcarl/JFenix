@@ -2,12 +2,15 @@ package sth;
 
 import java.util.*;
 
+
 public class Professor extends Person {
 	private List<Course> _courses;
 	private List<Subject> _subjects;
 	
 	public Professor(int id, String name, String phoneNumber) {
-		// TODO Auto-generated constructor stub
+		super(id, name, phoneNumber);
+		_courses = new ArrayList<Course>();
+		_subjects = new ArrayList<Subject>();
 	}
 
 	public void addSubject(Subject subject){
