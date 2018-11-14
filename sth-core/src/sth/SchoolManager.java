@@ -1,6 +1,9 @@
 package sth;
 
 import java.util.*;
+import java.io.ObjectInputStream;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import sth.exceptions.BadEntryException;
@@ -17,6 +20,7 @@ public class SchoolManager {
 	// FIXME add object attributes if needed
 	private School _school;
 	private Person _user;
+	private String _fileName;
 
 	// FIXME implement constructors if needed
 	public SchoolManager(){
@@ -30,7 +34,7 @@ public class SchoolManager {
 	 */
 	public void importFile(String datafile) throws ImportFileException {
 		try {
-			_school.importFile(datafile);
+			_school.importFile(datafile);			
 		} catch (IOException | BadEntryException e) {
 			throw new ImportFileException(e);
 		}
@@ -38,19 +42,21 @@ public class SchoolManager {
 
 	/**
 	 * @param datafile
-	 * @throws ImportFileException
-	 * @throws InvalidCourseSelectionException
+	 * @throws FileNotFoundException
+	 * @throws NoSuchPersonIdException
+	 * @throws NoSuchPersonIdException
 	 */
-	public void importNewFile(String datafile) throws FileNotFoundException, ImportFileException {
-		try {
-			_school.importFile(datafile);
-		} catch (FileNotFoundException ex) {
-			throw ex;
-		} catch (IOException | BadEntryException e) {
-			throw new ImportFileException(e);
-		}
+	public void importSchoolFile(String filename) throws FileNotFoundException, ClassNotFoundException, IOException, NoSuchPersonIdException {
+		ObjectInputStream reader = new ObjectInputStream(
+										new BufferedInputStream(
+											new FileInputStream(filename)));
+		School newSchool = (School)reader.readObject();
+		login(_user.getId());
+		_school = newSchool;
+		_fileName = filename;
 	}
 
+	
 	/**
 	 * @param id
 	 * @throws NoSuchPersonIdException

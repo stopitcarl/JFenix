@@ -2,22 +2,21 @@ package sth;
 
 import java.util.ArrayList;
 
-import javax.management.Notification;
-
 public abstract class Person {
 	private String _name;
 	private String _phoneNum;
 	private int _id;
-	private ArrayList < Notification > _notifications;
+	private ArrayList<Notification> _notifications;
 
-	public Person(int id, String name, String phoneNum) {		
+	public Person(int id, String name, String phoneNum) {
 		_id = id;
 		_name = name;
 		_phoneNum = phoneNum;
 		_notifications = new ArrayList<Notification>();
 	}
 
-	void addNotifications(Notification n) {}
+	void addNotifications(Notification n) {
+	}
 
 	public void setPhoneNumber(String newPhoneNum) {
 		_phoneNum = newPhoneNum;
@@ -27,5 +26,7 @@ public abstract class Person {
 		return _phoneNum;
 	}
 
+	public int getId() {
+		return _id;
+	}
 }
-
