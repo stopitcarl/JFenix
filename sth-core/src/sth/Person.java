@@ -26,7 +26,20 @@ public abstract class Person {
 		return _phoneNum;
 	}
 
+	public String getName() {
+		return _name;
+	}
+
 	public int getId() {
 		return _id;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Person) {
+			Person p = (Person) o;
+			return _id == p.getId();
+		}
+		return false;
 	}
 }

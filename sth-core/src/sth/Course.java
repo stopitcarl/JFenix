@@ -29,10 +29,27 @@ public class Course {
 		return _subjects;
 	}
 
+	public List<Student> getStudents() {
+		return new ArrayList<Student>(_students.values());
+	} 
+
+	public  Student getStudent(int id) {
+		return _students.get(id);				
+	} 
+
 	public void addStudent(Student s) {
+		if(!_students.containsKey(s.getId()))
+			_students.put(s.getId(), s);
 	}
 
 	public void addSubject(Subject s) {
+	}
+
+	public boolean isRepresentative(Student s){
+		for(Student rep: _representatives)
+			if(rep.equals(s))
+				return true;		
+		return false;
 	}
 
 	public void addRepresentative(Student s) {
@@ -44,5 +61,10 @@ public class Course {
 	}
 
 	public void removeRepresentative(Student s) {
+		for (int i = 0; i < MAX_REPRESENTATIVE; i++)
+			if (_representatives[i].equals(s)) {
+				_representatives[i] = null;
+				break;
+			}
 	}
 }

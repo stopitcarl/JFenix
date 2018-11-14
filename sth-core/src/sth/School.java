@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.Serializable;
 import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 import sth.exceptions.BadEntryException;
@@ -45,8 +46,7 @@ public class School implements Serializable {
 	 * @throws IOException
 	 */
 	public void importFile(String filename) throws IOException, BadEntryException, FileNotFoundException { // TODO: fix exceptions
-				BufferedReader reader = new BufferedReader(new FileReader(filename)); 
-																			
+				BufferedReader reader = new BufferedReader(new FileReader(filename)); 																			
 		String line;
 		try {
 			while ((line = reader.readLine()) != null) {
@@ -82,9 +82,8 @@ public class School implements Serializable {
 		_professor = null;
 		_student = null;
 
-		// Arg check		
-		for (String s : fields)
-			System.out.println(s);
+		// TODO: Arg check		
+		
 
 		// Read fields
 		int id = Integer.parseInt(fields[1]);
@@ -109,7 +108,7 @@ public class School implements Serializable {
 	}
 
 	private void registerSubject(String[] fields) throws BadEntryException { // TODO: fix this exception
-		// Arg check		
+		// TODO: Arg check				
 		fields[0] = fields[0].replaceAll("# ", "");
 		
 
@@ -159,13 +158,46 @@ public class School implements Serializable {
 		return null;
 	}
 
+	// #############################################################################
+	// #############################################################################
+
 	// FIXME implement other methods
-	public Person searchPerson(String name) {
-		return null;
+	public List<Person> searchPerson(String name) {
+		ArrayList<Person> matches = new ArrayList<Person>();
+		// Search student
+		for(Course c : _courses)
+			for(Student s : c.getStudents())
+				if (s.getName().contains(name))
+					matches.add(s);
+		// Search professors
+		for (Person prof : _professors)
+			if (prof.getName().contains(name))
+				matches.add(prof);
+		// Search administratives
+		for (Person admin : _administratives)
+			if (admin.getName().contains(name))
+				matches.add(admin);
+
+		return matches;
 	}
 
 	public Person searchPerson(int id) {
-		return null;
+		Person person;
+		// search professor list
+		for (Person prof : _professors)
+			if (prof.getId() == id)
+				return prof;
+		// search administrative list
+		for (Person admin : _administratives)
+			if (admin.getId() == id)
+				return admin;			
+		// search student list
+		for (Course c : _courses)	
+			if ((person = c.getStudent(id)) != null)
+				return person;
+
+
+		return null;								
 	}
 
 	public List<Person> getAllPeople() {

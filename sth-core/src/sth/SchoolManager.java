@@ -62,7 +62,8 @@ public class SchoolManager {
 	 * @throws NoSuchPersonIdException
 	 */
 	public void login(int id) throws NoSuchPersonIdException {
-		// FIXME implement method
+		if (searchPerson(id) == null)
+			throw new NoSuchPersonIdException(id);
 	}
 
 	/**
@@ -102,8 +103,12 @@ public class SchoolManager {
 		_user.setPhoneNumber(num);
 	}
 
-	public List<Person> searchPerson(String name) {
-		return null;
+	public List<Person> searchPerson(String name) {		
+		return _school.searchPerson(name);
+	}
+
+	public Person searchPerson(int id) {
+		return _school.searchPerson(id);										
 	}
 
 	public void showAllPersons() {
