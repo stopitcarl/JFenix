@@ -1,5 +1,6 @@
 package sth;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
@@ -7,9 +8,8 @@ import java.util.Locale;
 import java.text.Collator;
 import java.util.Collections;
 
-public class Professor extends Person {	
+public class Professor extends Person implements Serializable {	
 	TreeMap<Course ,ArrayList<Subject>> _taughtSubjects;
-
 
 	public Professor(int id, String name, String phoneNumber) {
 		super(id, name, phoneNumber);		
@@ -23,13 +23,18 @@ public class Professor extends Person {
 		_taughtSubjects.get(course).add(subject);
 	}
 
-/*
-* Informática - Análise e Síntese de Algoritmos
-* Informática - Inteligência Artificial
-* Informática - Sistemas Operativos
-* Informática - Fundamentos da Programação
-* Informática - Programação com Objectos
-*/
+	public Subject getDiscipline(String disciplineName) {
+		for (Course course : _taughtSubjects.keySet()){
+			for(Subject subject : _taughtSubjects.get(course)){
+				System.out.println(subject.getName());
+				if(disciplineName == subject.getName()){
+					return subject;
+				}
+			}
+		}
+		return null;
+	}
+
 	 
 	public List<String> getClasses(){ // TODO: find a better way to do this
 		ArrayList<String> classes = new ArrayList<String>();

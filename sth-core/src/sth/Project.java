@@ -1,8 +1,10 @@
 package sth;
 
 import java.util.*;
+import java.io.Serializable;
 
-public class Project {
+
+public class Project implements Serializable {
 	private String _name;
 	private String _description;
 	private boolean _isOpen;

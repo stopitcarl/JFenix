@@ -4,11 +4,16 @@ import java.util.*;
 import java.io.ObjectInputStream;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
+import java.io.ObjectOutputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import sth.exceptions.BadEntryException;
 import sth.exceptions.ImportFileException;
 import sth.exceptions.NoSuchPersonIdException;
+import sth.exceptions.IllegalDisciplineException;
+import sth.exceptions.IllegalProjectNameException;
 
 //FIXME import other classes if needed
 
@@ -112,8 +117,11 @@ public class SchoolManager {
 		return _school.searchPerson(id);										
 	}
 
-	public void showAllPersons() {
-
+	public String showAllPersons() {
+		String people = "";
+		for(String s : _school.showAllPersons())
+			people += s;
+		return people;		 
 	}
 
 	public String showPerson() {
@@ -141,8 +149,8 @@ public class SchoolManager {
 
 	}
 
-	public void createProject(String subjectName, String projectName) {
-
+	public void createProject(String subjectName, String projectName) throws IllegalDisciplineException, IllegalProjectNameException {
+		_school.createProject(_user, subjectName, projectName);
 	}
 
 	public List<Student> showDisciplineStudents(String subjectName) {
@@ -177,8 +185,21 @@ public class SchoolManager {
 		return null;
 	}
 
-	public void save(String filename) {
+	public boolean hasFileName(){
+		return _fileName != null;
+	}
 
+	public void save() throws FileNotFoundException, IOException {
+		ObjectOutputStream writer = new ObjectOutputStream(
+										new BufferedOutputStream(
+											new FileOutputStream(_fileName)));
+		writer.writeObject(_school);
+		writer.close();
+	}
+
+	public void save(String filename) throws FileNotFoundException, IOException  {		
+		_fileName = filename;
+		save();
 	}
 
 	public void open(String filename) {

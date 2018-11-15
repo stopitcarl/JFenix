@@ -1,9 +1,14 @@
 package sth;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.text.Collator;
+import java.util.Collections;
 
-public class Student extends Person {
+
+public class Student extends Person implements Serializable {
 	private List<Subject> _subjects;
 	// private Representative _representative; // TODO: delete this
 
@@ -18,10 +23,12 @@ public class Student extends Person {
 	}
 
 	public List<String> getClasses(Course course) {		
-		ArrayList<String> subjects = new ArrayList<String>();
+		ArrayList<String> classes = new ArrayList<String>();
 		for(Subject sub : _subjects)
-			subjects.add("* " + course.getName() + " - " + sub.getName());
-		return subjects;
+			classes.add("* " + course.getName() + " - " + sub.getName());
+
+		Collections.sort(classes, Collator.getInstance(Locale.getDefault()));
+		return classes;
 	}
 	
 	

@@ -1,8 +1,9 @@
 package sth;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public abstract class Person {
+public abstract class Person implements Serializable {
 	private String _name;
 	private String _phoneNum;
 	private int _id;

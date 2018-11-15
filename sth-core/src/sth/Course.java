@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.io.Serializable;
 
 
 
-public class Course implements Comparable<Course> {
+public class Course implements Comparable<Course>,  Serializable {
 	private int MAX_REPRESENTATIVE = 7;
 	private List<Subject> _subjects;
 	private Map<Integer ,Student> _students; // TODO: change arraylist to array

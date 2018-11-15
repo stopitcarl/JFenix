@@ -1,6 +1,8 @@
 package sth;
 
-public class Representative {
+import java.io.Serializable;
+
+public class Representative implements Serializable {
 	private int _id;
 	
 	public Representative(int id) {

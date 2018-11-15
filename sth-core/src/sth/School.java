@@ -6,11 +6,16 @@ import java.io.Serializable;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.text.Collator;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Pattern;
 import sth.exceptions.BadEntryException;
 import sth.exceptions.NoSuchPersonIdException;
-
+import sth.exceptions.IllegalDisciplineException;
+import sth.exceptions.IllegalProjectNameException;
 
 /**
  * School implementation.
@@ -20,9 +25,9 @@ public class School implements Serializable {
 	private List<Professor> _professors;
 	private List<Administrative> _administratives;
 
-	private Student _student;
-	private Professor _professor;
-	private boolean _isRep;
+	transient private Student _student;
+	transient private Professor _professor;
+	transient private boolean _isRep;
 
 	/** Serial number for serialization. */
 	private static final long serialVersionUID = 201810051538L;
@@ -210,11 +215,11 @@ public class School implements Serializable {
 	public Person searchPerson(int id) {
 		Person person;
 		// search professor list
-		for (Person prof : _professors)
+		for (Professor prof : _professors)
 			if (prof.getId() == id)
 				return prof;
 		// search administrative list
-		for (Person admin : _administratives)
+		for (Administrative admin : _administratives)
 			if (admin.getId() == id)
 				return admin;			
 		// search student list
@@ -225,14 +230,11 @@ public class School implements Serializable {
 
 		return null;								
 	}
-
-	public List<Person> getAllPeople() {
-		return null;
-	}
+	
 
 	public String showPerson(Person p) {
 		if (getAdministrative(p) != null)
-			return p.toString();
+			return p.toString()+"\n";
 		
 		String info = "";
 		Student st;
@@ -257,6 +259,26 @@ public class School implements Serializable {
 		return info;
 	}
 
+	public List<String> showAllPersons(){		
+		ArrayList<String> people = new ArrayList<String>();
+		// Index all professors
+		for (Professor prof : _professors)
+			people.add(showPerson(prof));				
+		
+		// Index all administratives
+		for (Administrative admin : _administratives)
+			people.add(showPerson(admin));				
+		
+		// Index all students
+		for (Course c : _courses)	
+			for(Student st : c.getStudents())
+				people.add(showPerson(st));
+		
+		Collections.sort(people, new PeopleSorter());
+		return people;
+	}
+	
+
 	private Course getStudentCourse(Student s){
 		for (Course c : _courses)
 			if (c.getStudent(s.getId()) != null)
@@ -279,6 +301,30 @@ public class School implements Serializable {
 	private String getProfessorDisciplines(Professor p) {
 		return "DELEGADO|" + p.toString();
 	}
+
+	public void createProject(Person user, String subjectName, String projectName) throws IllegalDisciplineException, IllegalProjectNameException {
+		Professor prof = getProfessor(user);
+		Subject subject;	
+		if((subject = prof.getDiscipline(subjectName)) == null)
+			throw new IllegalDisciplineException(subjectName);
+		
+		subject.addProject(projectName);
+	}
+
 	
+	
+	class PeopleSorter implements Comparator<String> {
+		
+		public int compare(String s1, String s2){
+			String[] fields1 = s1.split("\\|");
+			String[] fields2 = s2.split("\\|");			
+			
+			if(fields1.length == fields2.length && fields2.length > 1)
+				return fields1[1].compareTo(fields2[1]);
+			else
+				return 0;
+		}
+
+	}
 
 }

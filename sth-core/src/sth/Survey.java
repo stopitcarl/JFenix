@@ -1,14 +1,15 @@
 package sth;
 
-import java.util.*;
+import java.util.List;
+import java.io.Serializable;
 
-public class Survey {
+public class Survey implements Serializable {
 	private List<Answer> _answers;
 	private State _state;
 	private List<Student> _students;
 
 	public Survey() {
-		// TODO Auto-generated constructor stub
+		// TODO Auto-generated constructor
 	}
 
 	public void cancel() {
