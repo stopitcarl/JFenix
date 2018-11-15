@@ -12,8 +12,6 @@ import sth.exceptions.BadEntryException;
 import sth.exceptions.NoSuchPersonIdException;
 
 
-//FIXME import other classes if needed
-
 /**
  * School implementation.
  */
@@ -33,7 +31,6 @@ public class School implements Serializable {
 
 	// FIXME implement constructors if needed
 
-
 	public School() {
 		this._courses = new ArrayList<Course>();
 		this._professors = new ArrayList<Professor>();
@@ -45,8 +42,9 @@ public class School implements Serializable {
 	 * @throws BadEntryException
 	 * @throws IOException
 	 */
-	public void importFile(String filename) throws IOException, BadEntryException, FileNotFoundException { // TODO: fix exceptions
-				BufferedReader reader = new BufferedReader(new FileReader(filename)); 																			
+	public void importFile(String filename) throws IOException, BadEntryException, FileNotFoundException { // TODO: fix
+																											// exceptions
+		BufferedReader reader = new BufferedReader(new FileReader(filename));
 		String line;
 		try {
 			while ((line = reader.readLine()) != null) {
@@ -82,8 +80,7 @@ public class School implements Serializable {
 		_professor = null;
 		_student = null;
 
-		// TODO: Arg check		
-		
+		// TODO: Arg check
 
 		// Read fields
 		int id = Integer.parseInt(fields[1]);
@@ -96,10 +93,9 @@ public class School implements Serializable {
 			_isRep = true;
 		} else if (fields[0].equals("ALUNO")) {
 			_student = new Student(id, name, phoneNum);
-			// registerNewStudent()
 		} else if (fields[0].equals("DOCENTE")) {
 			_professor = new Professor(id, name, phoneNum);
-			// registerNewStudent()
+			_professors.add(_professor);
 		} else if (fields[0].equals("FUNCIONÁRIO")) {
 			_administratives.add(new Administrative(id, name, phoneNum));
 		} else {
@@ -108,16 +104,17 @@ public class School implements Serializable {
 	}
 
 	private void registerSubject(String[] fields) throws BadEntryException { // TODO: fix this exception
-		// TODO: Arg check				
+		// TODO: Arg check
 		fields[0] = fields[0].replaceAll("# ", "");
-		
 
 		Course course;
 		Subject subject;
 
 		// Create course if none exists
-		if ((course = searchCourse(fields[0])) == null)
-			course = new Course(fields[0]);		
+		if ((course = searchCourse(fields[0])) == null) {
+			course = new Course(fields[0]);
+			_courses.add(course);
+		}
 
 		// Create subject if none exists in that course
 		if ((subject = searchSubject(course, fields[1])) == null)
@@ -138,7 +135,7 @@ public class School implements Serializable {
 			_professor.addSubject(subject);
 		}
 	}
-	
+
 	private void addStudentToCourse(Course c) {
 		if (_student != null)
 			c.addStudent(_student);
@@ -157,6 +154,7 @@ public class School implements Serializable {
 				return s;
 		return null;
 	}
+
 
 	// #############################################################################
 	// #############################################################################

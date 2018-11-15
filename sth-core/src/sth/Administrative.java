@@ -10,4 +10,9 @@ public class Administrative extends Person {
 		super(id, name, phoneNumber);
 	}
 
+	@Override 
+	public String toString() {
+		return "ADMINISTRATIVE" + super.toString();
+	}
+
 }

@@ -17,6 +17,11 @@ public class Student extends Person {
 			_subjects.add(subject);
 	}
 
+	@Override 
+	public String toString() {
+		return "ALUNO" + super.toString();
+	}
+
 	/*
 	 * public void submitSurv(Answer answer, Survey s) {
 	 * 

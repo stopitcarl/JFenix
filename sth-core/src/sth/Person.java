@@ -42,4 +42,9 @@ public abstract class Person {
 		}
 		return false;
 	}
+
+	@Override 
+	public String toString() {
+		return " | " + _id + " | " + " | " + _phoneNum + " | " + _name;
+	}
 }

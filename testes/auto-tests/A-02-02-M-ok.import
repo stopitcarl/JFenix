@@ -5,7 +5,7 @@ DELEGADO|100010|123456789|João Maria
 # Informática|Programação com Objectos
 # Informática|Análise e Síntese de Algoritmos
 DELEGADO|100011|123456789|João Manuel
-# Informática|Fundamentois da Programação
+# Informática|Fundamentos da Programação
 # Informática|Algoritmos e Estruturas de Dados
 # Informática|Programação com Objectos
 # Informática|Análise e Síntese de Algoritmos
@@ -19,8 +19,8 @@ ALUNO|100013|123456789|José Manuel
 # Matemática|Probabilidades e Estatística
 # Matemática|Cálculo I
 # Matemática|Métodos Numéricos
-DOCENTE|100100|987654321|Ana Maria
+DOCENTE|100100|987654321|Anabela Dias Maria
+DOCENTE|100104|987654321|Ana Maria
 # Informática|Análise e Síntese de Algoritmos
 # Matemática|Álgebra Linear
 FUNCIONÁRIO|101010|789456123|José Carlos
-

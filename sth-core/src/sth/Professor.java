@@ -23,6 +23,11 @@ public class Professor extends Person {
 			_courses.add(course);
 	}
 
+	@Override 
+	public String toString() {
+		return "DOCENTE" + super.toString();
+	}
+
 	/*
 	 * public void createProject(Subject s, String name) { s.addProject(name); }
 	 * 
