@@ -4,15 +4,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import sth.exceptions.IllegalProjectNameException;
-import sth.exceptions.NoSuchProjectException;
+import sth.exceptions.NoSuchProjectNameException;
 
 public class Subject implements Serializable{
 	private String _name;
 	private List<Project> _projects;
 	private List<Person> _subscriptions;
 
-	public Subject(String projectName) {
-		_name = projectName;
+	public Subject(String name) {
+		_name = name;
 		_projects = new ArrayList<Project>();
 		_subscriptions = new ArrayList<Person>();
 	}
@@ -27,16 +27,18 @@ public class Subject implements Serializable{
 	
 	 public void addProject(String projectName) throws IllegalProjectNameException {
 		for (Project p : _projects)
-			if(projectName == p.getName())
+			if(projectName.equals(p.getName()))
 				throw new IllegalProjectNameException(projectName, _name);
 		 _projects.add(new Project(projectName)); 
 	}
 	 
-	 public void closeProject(String projectName) throws NoSuchProjectException { 
+	 public void closeProject(String projectName) throws NoSuchProjectNameException { 
 		for (Project p : _projects)
-			if(projectName == p.getName())
+			if(projectName.equals(p.getName())){
 				p.closeProject();
-		throw new NoSuchProjectException(projectName);
+				return;
+			}
+		throw new NoSuchProjectNameException(projectName, _name);
 	}
 	
 	/*
@@ -52,7 +54,7 @@ public class Subject implements Serializable{
 	public boolean equals(Object o) {
 		if (o instanceof Subject) {
 			Subject s = (Subject) o;
-			return _name == s.getName();
+			return _name.equals(s.getName());
 		}
 		return false;
 	}

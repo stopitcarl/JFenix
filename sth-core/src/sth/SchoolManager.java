@@ -14,6 +14,7 @@ import sth.exceptions.ImportFileException;
 import sth.exceptions.NoSuchPersonIdException;
 import sth.exceptions.IllegalDisciplineException;
 import sth.exceptions.IllegalProjectNameException;
+import sth.exceptions.NoSuchProjectNameException;
 
 //FIXME import other classes if needed
 
@@ -145,16 +146,19 @@ public class SchoolManager {
 		return null;
 	}
 
-	public void closeProject(String subjectName, String projectName) {
-
+	public void closeProject(String subjectName, String projectName)throws IllegalDisciplineException, NoSuchProjectNameException {
+		_school.closeProject(_user, subjectName, projectName);
 	}
 
 	public void createProject(String subjectName, String projectName) throws IllegalDisciplineException, IllegalProjectNameException {
 		_school.createProject(_user, subjectName, projectName);
 	}
 
-	public List<Student> showDisciplineStudents(String subjectName) {
-		return null;
+	public String showDisciplineStudents(String subjectName) throws  IllegalDisciplineException {
+		String students = "";
+		for(String s : _school.showDisciplineStudents(_user, subjectName))
+			students += s;
+		return students;
 	}
 
 	public Map<Student, String> showProjectSubmissions(String subjectName, String projectName) {

@@ -16,6 +16,7 @@ import sth.exceptions.BadEntryException;
 import sth.exceptions.NoSuchPersonIdException;
 import sth.exceptions.IllegalDisciplineException;
 import sth.exceptions.IllegalProjectNameException;
+import sth.exceptions.NoSuchProjectNameException;
 
 /**
  * School implementation.
@@ -309,6 +310,35 @@ public class School implements Serializable {
 			throw new IllegalDisciplineException(subjectName);
 		
 		subject.addProject(projectName);
+	}
+
+	public void closeProject(Person user, String subjectName, String projectName) throws IllegalDisciplineException, NoSuchProjectNameException {
+		Professor prof = getProfessor(user);
+		Subject subject;	
+		if((subject = prof.getDiscipline(subjectName)) == null)
+			throw new IllegalDisciplineException(subjectName);
+		
+		subject.closeProject(projectName);
+	}
+
+	public List<String> showDisciplineStudents(Person user, String subjectName) throws IllegalDisciplineException{
+		Subject subject;			
+		ArrayList<String> students = new ArrayList<String>();
+		Professor prof = getProfessor(user);
+		
+		if((subject = prof.getDiscipline(subjectName)) == null)
+			throw new IllegalDisciplineException(subjectName);
+		
+		for(Course c : prof.getCourses()){
+			for(Student s : c.getStudents())
+				if(s.isEnrolledIn(subject))	
+					students.add(showPerson(s));
+			break;			
+		}
+				
+			
+		
+		return students;
 	}
 
 	

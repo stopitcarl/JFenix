@@ -23,11 +23,14 @@ public class Professor extends Person implements Serializable {
 		_taughtSubjects.get(course).add(subject);
 	}
 
+	public List<Course> getCourses() {
+		return new ArrayList<Course>(_taughtSubjects.keySet());
+	}
+
 	public Subject getDiscipline(String disciplineName) {
 		for (Course course : _taughtSubjects.keySet()){
-			for(Subject subject : _taughtSubjects.get(course)){
-				System.out.println(subject.getName());
-				if(disciplineName == subject.getName()){
+			for(Subject subject : _taughtSubjects.get(course)){				
+				if(disciplineName.equals(subject.getName())){
 					return subject;
 				}
 			}

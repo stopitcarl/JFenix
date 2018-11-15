@@ -30,6 +30,13 @@ public class Student extends Person implements Serializable {
 		Collections.sort(classes, Collator.getInstance(Locale.getDefault()));
 		return classes;
 	}
+
+	public boolean isEnrolledIn(Subject subject){
+		for (Subject s : _subjects)
+			if (s.equals(subject))
+				return true;
+		return false;
+	}
 	
 	
 	/*
