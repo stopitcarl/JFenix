@@ -27,8 +27,6 @@ public class School implements Serializable {
 	/** Serial number for serialization. */
 	private static final long serialVersionUID = 201810051538L;
 
-	// FIXME define object fields (attributes and, possibly, associations)
-
 	// FIXME implement constructors if needed
 
 	public School() {
@@ -73,7 +71,6 @@ public class School implements Serializable {
 		} else {
 			throw new BadEntryException(fields.toString());
 		}
-
 	}
 
 	private void registerPerson(String[] fields) throws BadEntryException { // TODO: find suitable exception
@@ -131,8 +128,7 @@ public class School implements Serializable {
 			course.addStudent(_student);
 			_student.addSubject(subject);
 		} else if (_professor != null) {
-			_professor.addCourse(course);
-			_professor.addSubject(subject);
+			_professor.addSubject(course, subject);
 		}
 	}
 
@@ -153,11 +149,43 @@ public class School implements Serializable {
 			if (s.getName().equals(name))
 				return s;
 		return null;
+	}	
+
+	// #############################################################################
+	// #############################################################################
+
+	public Administrative getAdministrative(Person user){
+		// Search administratives
+		for (Administrative admin : _administratives)
+			if (admin.equals(user))
+				return admin;
+		return null;
 	}
 
+	public Professor getProfessor(Person user){
+		// Search professors
+		for (Professor prof : _professors)
+			if (prof.equals(user))
+				return prof;
+		return null;
+	}
 
-	// #############################################################################
-	// #############################################################################
+	public Student getStudent(Person user){
+		// Search student
+		for(Course c : _courses)
+			for(Student s : c.getStudents())
+				if(user.equals(s))
+					return s;
+		return null;
+	}
+
+	public boolean isRepresentative(Person user){
+		// Search student
+		for(Course c : _courses)			
+				if (c.isRepresentative(user))
+					return true;
+		return false;
+	}
 
 	// FIXME implement other methods
 	public List<Person> searchPerson(String name) {
@@ -201,4 +229,56 @@ public class School implements Serializable {
 	public List<Person> getAllPeople() {
 		return null;
 	}
+
+	public String showPerson(Person p) {
+		if (getAdministrative(p) != null)
+			return p.toString();
+		
+		String info = "";
+		Student st;
+		Professor prof;
+		List<String> classes;
+
+		if((st = getStudent(p)) != null){
+			if(isRepresentative(p))
+				info += showRepresentative(p)+ "\n";
+			else 
+				info += showStudent(p) + "\n";
+			classes = st.getClasses(getStudentCourse(st));
+		} else {
+			prof = getProfessor(p);
+			info += prof.toString() + "\n";
+			classes = prof.getClasses();
+		}
+
+		for(String s : classes)
+			info += s + "\n";
+		
+		return info;
+	}
+
+	private Course getStudentCourse(Student s){
+		for (Course c : _courses)
+			if (c.getStudent(s.getId()) != null)
+				return c;
+		return null;			
+	}
+
+
+	private String showStudent(Person p) {
+		return "ALUNO|" + p.toString();
+	}
+	private String showRepresentative(Person p) {
+		return "DELEGADO|" + p.toString();
+	}
+
+	private String getStudentDisciplines(Person p) {
+		return "DELEGADO|" + p.toString();
+	}
+
+	private String getProfessorDisciplines(Professor p) {
+		return "DELEGADO|" + p.toString();
+	}
+	
+
 }

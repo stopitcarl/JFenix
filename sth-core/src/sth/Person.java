@@ -33,8 +33,7 @@ public abstract class Person {
 	public int getId() {
 		return _id;
 	}
-
-	@Override
+	
 	public boolean equals(Object o) {
 		if (o instanceof Person) {
 			Person p = (Person) o;
@@ -45,6 +44,6 @@ public abstract class Person {
 
 	@Override 
 	public String toString() {
-		return " | " + _id + " | " + " | " + _phoneNum + " | " + _name;
+		return _id + "|" + _phoneNum + "|" + _name;
 	}
 }

@@ -62,40 +62,37 @@ public class SchoolManager {
 	 * @throws NoSuchPersonIdException
 	 */
 	public void login(int id) throws NoSuchPersonIdException {
-		if (searchPerson(id) == null)
+		if ((_user = searchPerson(id)) == null)
 			throw new NoSuchPersonIdException(id);
+		
 	}
 
 	/**
 	 * @return true when the currently logged in person is an administrative
 	 */
-	public boolean hasAdministrative() {
-		// FIXME implement predicate
-		return false;
+	public boolean hasAdministrative() {		
+		return _school.getAdministrative(_user) != null;
 	}
 
 	/**
 	 * @return true when the currently logged in person is a professor
 	 */
 	public boolean hasProfessor() {
-		// FIXME implement predicate
-		return false;
+		return _school.getProfessor(_user) != null;
 	}
 
 	/**
 	 * @return true when the currently logged in person is a student
 	 */
 	public boolean hasStudent() {
-		// FIXME implement predicate
-		return false;
+		return _school.getStudent(_user) != null;
 	}
 
 	/**
 	 * @return true when the currently logged in person is a representative
 	 */
 	public boolean hasRepresentative() {
-		// FIXME implement predicate
-		return false;
+		return _school.isRepresentative(_user) ;
 	}
 
 	// FIXME implement other methods (in general, one for each command in sth-app)
@@ -103,8 +100,12 @@ public class SchoolManager {
 		_user.setPhoneNumber(num);
 	}
 
-	public List<Person> searchPerson(String name) {		
-		return _school.searchPerson(name);
+	public String searchPerson(String name) {		
+		String results = "";
+		for(Person p: _school.searchPerson(name))
+			results += _school.showPerson(p);
+
+		return results;
 	}
 
 	public Person searchPerson(int id) {
@@ -115,8 +116,13 @@ public class SchoolManager {
 
 	}
 
-	public void showPerson(int id) {
+	public String showPerson() {
+		return _school.showPerson(_user);
+	}
 
+
+	public String showPerson(int id) {
+		return "";
 	}
 
 	public void answerSurvey(String subjectName, String projectName, int hours, String comment) {

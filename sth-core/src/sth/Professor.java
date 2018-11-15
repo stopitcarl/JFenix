@@ -2,30 +2,49 @@ package sth;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
+import java.util.Locale;
+import java.text.Collator;
+import java.util.Collections;
 
-public class Professor extends Person {
-	private List<Course> _courses;
-	private List<Subject> _subjects;
+public class Professor extends Person {	
+	TreeMap<Course ,ArrayList<Subject>> _taughtSubjects;
+
 
 	public Professor(int id, String name, String phoneNumber) {
-		super(id, name, phoneNumber);
-		_courses = new ArrayList<Course>();
-		_subjects = new ArrayList<Subject>();
+		super(id, name, phoneNumber);		
+		_taughtSubjects = new TreeMap<Course ,ArrayList<Subject>>();
 	}
 
-	public void addSubject(Subject subject) {
-		if (!_subjects.contains(subject))
-			_subjects.add(subject);
+	public void addSubject(Course course, Subject subject) {		
+		if (!_taughtSubjects.containsKey(course))
+			_taughtSubjects.put(course, new ArrayList<Subject>());		
+		
+		_taughtSubjects.get(course).add(subject);
 	}
 
-	public void addCourse(Course course) {
-		if (!_courses.contains(course))
-			_courses.add(course);
+/*
+* Informática - Análise e Síntese de Algoritmos
+* Informática - Inteligência Artificial
+* Informática - Sistemas Operativos
+* Informática - Fundamentos da Programação
+* Informática - Programação com Objectos
+*/
+	 
+	public List<String> getClasses(){ // TODO: find a better way to do this
+		ArrayList<String> classes = new ArrayList<String>();
+
+		for (Course course : _taughtSubjects.keySet())
+			for(Subject subject : _taughtSubjects.get(course))
+				classes.add("* " + course.getName() + " - " + subject.getName());
+		
+		Collections.sort(classes, Collator.getInstance(Locale.getDefault()));
+		return classes;
 	}
 
 	@Override 
 	public String toString() {
-		return "DOCENTE" + super.toString();
+		return "DOCENTE|" + super.toString();
 	}
 
 	/*

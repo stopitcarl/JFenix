@@ -1,7 +1,6 @@
 package sth;
 
-import java.util.*;
-
+import java.util.List;
 
 public class Administrative extends Person {
 	private List<Course> _courses;
@@ -12,7 +11,6 @@ public class Administrative extends Person {
 
 	@Override 
 	public String toString() {
-		return "ADMINISTRATIVE" + super.toString();
+		return "FUNCIONÁRIO|" + super.toString();
 	}
-
 }

@@ -11,20 +11,22 @@ import sth.SchoolManager;
  */
 public class DoSearchPerson extends Command<SchoolManager> {
 
-  //FIXME add input fields if needed
+  /** Name to search for. */
+  Input<String> _name;
   
   /**
    * @param receiver
    */
   public DoSearchPerson(SchoolManager receiver) {
     super(Label.SEARCH_PERSON, receiver);
-    //FIXME initialize input fields if needed
+    _name = _form.addStringInput(Message.requestPersonName());
   }
 
   /** @see pt.tecnico.po.ui.Command#execute() */
   @Override
   public final void execute() {
-    //FIXME implement command
+    _form.parse();    
+    _display.popup(_receiver.searchPerson(_name.value()));    
   }
 
 }

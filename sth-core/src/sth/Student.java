@@ -17,11 +17,14 @@ public class Student extends Person {
 			_subjects.add(subject);
 	}
 
-	@Override 
-	public String toString() {
-		return "ALUNO" + super.toString();
+	public List<String> getClasses(Course course) {		
+		ArrayList<String> subjects = new ArrayList<String>();
+		for(Subject sub : _subjects)
+			subjects.add("* " + course.getName() + " - " + sub.getName());
+		return subjects;
 	}
-
+	
+	
 	/*
 	 * public void submitSurv(Answer answer, Survey s) {
 	 * 

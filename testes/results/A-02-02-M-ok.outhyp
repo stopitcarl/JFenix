@@ -2,6 +2,7 @@ Identificador: Menu principal
 1 - Abrir
 2 - Guardar
 3 - Portal Pessoal
+4 - Portal do Docente
 0 - Sair
 Escolha uma opção: Portal Pessoal
 1 - Mostrar pessoa
@@ -13,6 +14,7 @@ Escolha uma opção: Menu principal
 1 - Abrir
 2 - Guardar
 3 - Portal Pessoal
+4 - Portal do Docente
 0 - Sair
 Escolha uma opção: Portal Pessoal
 1 - Mostrar pessoa
@@ -20,7 +22,8 @@ Escolha uma opção: Portal Pessoal
 3 - Mostrar pessoas
 4 - Procurar pessoa
 0 - Sair
-Escolha uma opção: Portal Pessoal
+Escolha uma opção: DOCENTE|100100|987654321|Anabela Dias Maria
+Portal Pessoal
 1 - Mostrar pessoa
 2 - Alterar número de telefone
 3 - Mostrar pessoas
@@ -30,5 +33,6 @@ Escolha uma opção: Menu principal
 1 - Abrir
 2 - Guardar
 3 - Portal Pessoal
+4 - Portal do Docente
 0 - Sair
 Escolha uma opção: 

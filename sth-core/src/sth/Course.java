@@ -7,17 +7,17 @@ import java.util.TreeMap;
 
 
 
-public class Course {
-	private static final int MAX_REPRESENTATIVE = 7;
+public class Course implements Comparable<Course> {
+	private int MAX_REPRESENTATIVE = 7;
 	private List<Subject> _subjects;
 	private Map<Integer ,Student> _students; // TODO: change arraylist to array
 	private String _name;
-	private Student _representatives[];
+	private ArrayList<Student> _representatives;
 
 	public Course(String name) {
 		_name = name;
 		_subjects = new ArrayList<Subject>();
-		_representatives = new Student[MAX_REPRESENTATIVE];
+		_representatives = new ArrayList<Student>(MAX_REPRESENTATIVE);
 		_students = new TreeMap<Integer, Student>();
 	}
 
@@ -45,7 +45,7 @@ public class Course {
 	public void addSubject(Subject s) {
 	}
 
-	public boolean isRepresentative(Student s){
+	public boolean isRepresentative(Person s){
 		for(Student rep: _representatives)
 			if(rep.equals(s))
 				return true;		
@@ -53,18 +53,16 @@ public class Course {
 	}
 
 	public void addRepresentative(Student s) {
-		for (int i = 0; i < MAX_REPRESENTATIVE; i++)
-			if (_representatives[i] == null) {
-				_representatives[i] = s;
-				break;
-			}
+		if(_representatives.size() < MAX_REPRESENTATIVE)
+			_representatives.add(s);
 	}
 
-	public void removeRepresentative(Student s) {
-		for (int i = 0; i < MAX_REPRESENTATIVE; i++)
-			if (_representatives[i].equals(s)) {
-				_representatives[i] = null;
-				break;
-			}
+	public void removeRepresentative(Student s) {		
+			_representatives.remove(s);
 	}
+
+	public int compareTo(Course c){
+		return _name.compareTo(c.getName());
+	}
+
 }

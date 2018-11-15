@@ -11,6 +11,7 @@ import sth.SchoolManager;
  */
 public class DoChangePhoneNumber extends Command<SchoolManager> {
   
+  /** New phone number to change to. */
   Input<String> _phoneNum;
 
   /**
@@ -24,7 +25,9 @@ public class DoChangePhoneNumber extends Command<SchoolManager> {
   /** @see pt.tecnico.po.ui.Command#execute() */
   @Override
   public final void execute() {
-    //FIXME implement command
+    _form.parse();
+    _receiver.changePhoneNumber(_phoneNum.value());
+    _display.popup(_receiver.showPerson());
   }
 
 }

@@ -2,6 +2,7 @@ Identificador: Menu principal
 1 - Abrir
 2 - Guardar
 3 - Portal Pessoal
+5 - Portal do Estudante
 0 - Sair
 Escolha uma opção: Portal Pessoal
 1 - Mostrar pessoa
@@ -9,7 +10,9 @@ Escolha uma opção: Portal Pessoal
 3 - Mostrar pessoas
 4 - Procurar pessoa
 0 - Sair
-Escolha uma opção: Portal Pessoal
+Escolha uma opção: ALUNO|100013|123456789|José Manuel
+* Matemática - Álgebra Linear
+Portal Pessoal
 1 - Mostrar pessoa
 2 - Alterar número de telefone
 3 - Mostrar pessoas
@@ -19,5 +22,6 @@ Escolha uma opção: Menu principal
 1 - Abrir
 2 - Guardar
 3 - Portal Pessoal
+5 - Portal do Estudante
 0 - Sair
 Escolha uma opção: 
