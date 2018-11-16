@@ -3,7 +3,7 @@ package sth.exceptions;
 /** Exception thrown when the requested project does not exist. */
 public class NoSuchProjectNameException extends Exception {
 
-  /** Serial number for serialization. */
+  /** Class serial number. */
   private static final long serialVersionUID = 201809021324L;
 
   /** Discipline name. */

@@ -1,63 +1,108 @@
 package sth;
 
-import java.util.ArrayList;
+import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.io.Serializable;
-
 
 
 public class Course implements Comparable<Course>,  Serializable {
+	/* Maximum number of representatives */
 	private int MAX_REPRESENTATIVE = 7;
+	/* Maximum number of representatives */
+	private int MAX_STUDENTS = 200;
+	/** List of subjects */
 	private List<Subject> _subjects;
-	private Map<Integer ,Student> _students; // TODO: change arraylist to array
+	/** Map of students and their id */
+	private Map<Integer ,Student> _students;
+	/** Course's name */
 	private String _name;
-	private ArrayList<Student> _representatives;
+	/** List of representatives */
+	private LinkedList<Student> _representatives;
 
+	/**
+	 * @param name Course's name 
+	 */
 	public Course(String name) {
 		_name = name;
-		_subjects = new ArrayList<Subject>();
-		_representatives = new ArrayList<Student>(MAX_REPRESENTATIVE);
+		_subjects = new LinkedList<Subject>();
+		_representatives = new LinkedList<Student>();
 		_students = new TreeMap<Integer, Student>();
 	}
 
+	/**
+ 	* @return course name
+ 	*/
 	public String getName() {
 		return _name;
 	}
 
+	/**
+	 * @return list of subjects
+	 */
 	public List<Subject> getSubjects() {
 		return _subjects;
 	}
 
+
+	/**
+	 * @return list of students
+	 */
 	public List<Student> getStudents() {
-		return new ArrayList<Student>(_students.values());
+		return new LinkedList<Student>(_students.values());
 	} 
 
-	public  Student getStudent(int id) {
+	/** 
+	 * @param id
+	 * @return Student with the given id
+	 */
+	public Student getStudent(int id) {
 		return _students.get(id);				
 	} 
 
+	/**
+	 * adds student s to student list
+	 * @param s 
+	 */
 	public void addStudent(Student s) {
-		if(!_students.containsKey(s.getId()))
+		if(_students.size() < MAX_STUDENTS && !_students.containsKey(s.getId()))
 			_students.put(s.getId(), s);
 	}
 
+	/**
+	 * adds subject s to list of subjects
+	 * @param s
+	 */
 	public void addSubject(Subject s) {
+		if (!_subjects.contains(s))
+			_subjects.add(s);
 	}
 
-	public boolean isRepresentative(Person s){
+	/**
+ 	* @param p
+ 	* @return true if person is representative
+ 	*/
+	public boolean isRepresentative(Person p){
 		for(Student rep: _representatives)
-			if(rep.equals(s))
+			if(rep.equals(p))
 				return true;		
 		return false;
 	}
 
+	/**
+	 * adds student s to representative list
+	 * @param s
+	 */
 	public void addRepresentative(Student s) {
 		if(_representatives.size() < MAX_REPRESENTATIVE)
 			_representatives.add(s);
 	}
 
+	/**
+	 * removes student s from representative list
+	 * @param s
+	 */
 	public void removeRepresentative(Student s) {		
 			_representatives.remove(s);
 	}

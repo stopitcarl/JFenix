@@ -1,9 +1,11 @@
 package sth.exceptions;
 
-/** Exception thrown when the requested subject does not exist. */
+/** 
+ *Exception thrown when the requested subject does not exist.
+ */
 public class IllegalDisciplineException extends Exception {
 
-  /** Serial number for serialization. */
+  /** Class serial number. */
   private static final long serialVersionUID = 201809021324L;
 
   /** Discipline name. */
@@ -16,7 +18,9 @@ public class IllegalDisciplineException extends Exception {
     _name = name;
   }
 
-  /** @return name */
+  /** 
+   * @return name. 
+   */
   public String getName() {
     return _name;
   }

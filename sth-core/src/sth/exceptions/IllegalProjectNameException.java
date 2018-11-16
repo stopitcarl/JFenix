@@ -3,11 +3,12 @@ package sth.exceptions;
 /** Exception thrown when the requested project already exists. */
 public class IllegalProjectNameException extends Exception {
 
-  /** Serial number for serialization. */
+  /** Class serial number */
   private static final long serialVersionUID = 201809021324L;
 
-  /** Discipline name. */
+  /** Project name. */
   private String _projectName;
+  /** Subject name. */
   private String _subjectName;
 
   /**

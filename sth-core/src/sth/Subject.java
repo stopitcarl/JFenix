@@ -1,30 +1,51 @@
 package sth;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import sth.exceptions.IllegalProjectNameException;
 import sth.exceptions.NoSuchProjectNameException;
 
+/**
+ * Representation of Subject
+ */
 public class Subject implements Serializable{
+	/** Subject's name */
 	private String _name;
+	/** List of projects */
 	private List<Project> _projects;
+	/** list of subscriptions */ 
 	private List<Person> _subscriptions;
 
+	/**
+ 	* @param name Subject's name
+ 	*/
 	public Subject(String name) {
 		_name = name;
-		_projects = new ArrayList<Project>();
-		_subscriptions = new ArrayList<Person>();
+		_projects = new LinkedList<Project>();
+		_subscriptions = new LinkedList<Person>();
 	}
 
+	/**
+	 * 
+	 * @return subject's name
+	 */
 	public String getName() {
 		return _name;
 	}
 
+	/**
+	 * @return List of projects
+	 */
 	public List<Project> getProjects() {
 		return _projects;		
 	}
 	
+	/**
+	 * adds project with projectName to the list of projects
+	 * @param projectName
+	 * @throws IllegalProjectNameException
+	 */
 	 public void addProject(String projectName) throws IllegalProjectNameException {
 		for (Project p : _projects)
 			if(projectName.equals(p.getName()))
@@ -32,6 +53,11 @@ public class Subject implements Serializable{
 		 _projects.add(new Project(projectName)); 
 	}
 	 
+	/**
+	 * closes project with projectName
+	 * @param projectName
+	 * @throws NoSuchProjectNameException
+	 */
 	 public void closeProject(String projectName) throws NoSuchProjectNameException { 
 		for (Project p : _projects)
 			if(projectName.equals(p.getName())){

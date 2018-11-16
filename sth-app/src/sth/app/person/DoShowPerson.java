@@ -10,14 +10,11 @@ import sth.SchoolManager;
  */
 public class DoShowPerson extends Command<SchoolManager> {
 
-  //FIXME add input fields if needed
-
   /**
    * @param receiver
    */
   public DoShowPerson(SchoolManager receiver) {
-    super(Label.SHOW_PERSON, receiver);
-    //FIXME initialize input fields if needed
+    super(Label.SHOW_PERSON, receiver);    
   }
 
   /** @see pt.tecnico.po.ui.Command#execute() */

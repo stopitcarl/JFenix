@@ -2,6 +2,7 @@ package sth;
 
 import java.io.Serializable;
 
-public class Notification implements Serializable{ // TODO: Implement Notification
+/** Representation of Notification */
+public class Notification implements Serializable{
     public Notification(){}
 }

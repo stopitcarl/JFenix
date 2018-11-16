@@ -15,30 +15,31 @@ import sth.app.exceptions.NoSuchDisciplineException;
  */
 public class DoCloseProject extends Command<SchoolManager> {
 
-  //FIXME add input fields if needed
-  Input<String> _projectName;
-  Input<String> _disciplineName;
+    /** Name of project to be closed */
+    Input<String> _projectName;
+    /** Name of project's subject. */
+    Input<String> _disciplineName;
 
-  /**
-   * @param receiver
-   */
-  public DoCloseProject(SchoolManager receiver) {
-    super(Label.CLOSE_PROJECT, receiver);
-    _disciplineName = _form.addStringInput(Message.requestDisciplineName());
-    _projectName = _form.addStringInput(Message.requestProjectName());    
+    /**
+    * @param receiver
+    */
+    public DoCloseProject(SchoolManager receiver) {
+      super(Label.CLOSE_PROJECT, receiver);
+      _disciplineName = _form.addStringInput(Message.requestDisciplineName());
+      _projectName = _form.addStringInput(Message.requestProjectName());    
+    }
+
+    /** @see pt.tecnico.po.ui.Command#execute() */
+    @Override
+    public final void execute() throws DialogException {
+      _form.parse();
+        try{
+          _receiver.closeProject(_disciplineName.value(), _projectName.value());
+        } catch(IllegalDisciplineException e){
+              throw new NoSuchDisciplineException(e.getName());
+        } catch(NoSuchProjectNameException e){    
+              throw new NoSuchProjectException(e.getSubjectName(), e.getProjectName());
+      }
+    }
+
   }
-
-  /** @see pt.tecnico.po.ui.Command#execute() */
-  @Override
-  public final void execute() throws DialogException {
-    _form.parse();
-    	try{
-    	 	    _receiver.closeProject(_disciplineName.value(), _projectName.value());
-  		} catch(IllegalDisciplineException e){
-			      throw new NoSuchDisciplineException(e.getName());
-	  	} catch(NoSuchProjectNameException e){    
-			      throw new NoSuchProjectException(e.getSubjectName(), e.getProjectName());
-		}
-  }
-
-}

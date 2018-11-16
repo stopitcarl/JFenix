@@ -5,7 +5,7 @@ import java.io.FileReader;
 import java.io.Serializable;
 import java.io.IOException;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.text.Collator;
 import java.util.Collections;
 import java.util.Comparator;
@@ -22,127 +22,41 @@ import sth.exceptions.NoSuchProjectNameException;
  * School implementation.
  */
 public class School implements Serializable {
+	/** List of courses */
 	private List<Course> _courses;
+	/** List of professors */
 	private List<Professor> _professors;
+	/** List of administratives*/
 	private List<Administrative> _administratives;
 
-	transient private Student _student;
-	transient private Professor _professor;
-	transient private boolean _isRep;
-
+	
 	/** Serial number for serialization. */
 	private static final long serialVersionUID = 201810051538L;
 
-	// FIXME implement constructors if needed
-
+	/**
+	 * Initialise the Lists of courses, professors and administratives
+	 */
 	public School() {
-		this._courses = new ArrayList<Course>();
-		this._professors = new ArrayList<Professor>();
-		this._administratives = new ArrayList<Administrative>();
+		this._courses = new LinkedList<Course>();
+		this._professors = new LinkedList<Professor>();
+		this._administratives = new LinkedList<Administrative>();
 	}
 
-	/**
+	/** 
+	 * Creates new school from object file 'filename'
 	 * @param filename
 	 * @throws BadEntryException
 	 * @throws IOException
 	 */
-	public void importFile(String filename) throws IOException, BadEntryException, FileNotFoundException { // TODO: fix
-																											// exceptions
-		BufferedReader reader = new BufferedReader(new FileReader(filename));
-		String line;
-		try {
-			while ((line = reader.readLine()) != null) {
-				String[] fields = line.split("\\|");
-				registerFromFields(fields);
-			}
-		} catch (FileNotFoundException fnfe) {
-			throw fnfe;
-		} catch (BadEntryException bex) {
-			throw bex;
-		} catch (IOException e) {
-			throw e;
-		}
-		reader.close();
+	public void importFile(String filename) throws IOException, BadEntryException, FileNotFoundException { 
+		FileImporter fileIn = new FileImporter();
+		fileIn.importFile(filename);
 	}
 
-	private void registerFromFields(String[] fields) throws BadEntryException { // TODO: Different Exceptions
-		// Regular expression pattern to match an agent.
-		Pattern patPerson = Pattern.compile("^(ALUNO|DELEGADO|DOCENTE|FUNCIONÁRIO)");
-		Pattern patSubject = Pattern.compile("^#.*$");
-
-		if (patPerson.matcher(fields[0]).matches() && fields.length == 4) {
-			registerPerson(fields);
-		} else if (patSubject.matcher(fields[0]).matches() && fields.length == 2) {
-			registerSubject(fields);
-		} else {
-			throw new BadEntryException(fields.toString());
-		}
-	}
-
-	private void registerPerson(String[] fields) throws BadEntryException { // TODO: find suitable exception
-		_professor = null;
-		_student = null;
-
-		// TODO: Arg check
-
-		// Read fields
-		int id = Integer.parseInt(fields[1]);
-		String phoneNum = fields[2];
-		String name = fields[3];
-
-		// Create objects
-		if (fields[0].equals("DELEGADO")) {
-			_student = new Student(id, name, phoneNum);
-			_isRep = true;
-		} else if (fields[0].equals("ALUNO")) {
-			_student = new Student(id, name, phoneNum);
-		} else if (fields[0].equals("DOCENTE")) {
-			_professor = new Professor(id, name, phoneNum);
-			_professors.add(_professor);
-		} else if (fields[0].equals("FUNCIONÁRIO")) {
-			_administratives.add(new Administrative(id, name, phoneNum));
-		} else {
-			throw new BadEntryException(fields[0]);
-		}
-	}
-
-	private void registerSubject(String[] fields) throws BadEntryException { // TODO: fix this exception
-		// TODO: Arg check
-		fields[0] = fields[0].replaceAll("# ", "");
-
-		Course course;
-		Subject subject;
-
-		// Create course if none exists
-		if ((course = searchCourse(fields[0])) == null) {
-			course = new Course(fields[0]);
-			_courses.add(course);
-		}
-
-		// Create subject if none exists in that course
-		if ((subject = searchSubject(course, fields[1])) == null)
-			subject = new Subject(fields[1]);
-
-		course.addSubject(subject);
-
-		if (_isRep) {
-			course.addRepresentative(_student);
-			_isRep = false;
-		}
-
-		if (_student != null) {
-			course.addStudent(_student);
-			_student.addSubject(subject);
-		} else if (_professor != null) {
-			_professor.addSubject(course, subject);
-		}
-	}
-
-	private void addStudentToCourse(Course c) {
-		if (_student != null)
-			c.addStudent(_student);
-	}
-
+	/**
+	 * @param name
+	 * @return course with given name
+	 */
 	private Course searchCourse(final String name) {
 		for (Course c : _courses)
 			if (c.getName().equals(name))
@@ -150,16 +64,22 @@ public class School implements Serializable {
 		return null;
 	}
 
+	/**
+	 * @param course
+	 * @param name
+	 * @return subject with given name in course
+	 */
 	private Subject searchSubject(final Course course, final String name) {
 		for (Subject s : course.getSubjects())
 			if (s.getName().equals(name))
 				return s;
 		return null;
 	}	
-
-	// #############################################################################
-	// #############################################################################
-
+	
+	/**
+	 * @param user
+	 * @return an Administrative if user is an administrative
+	 */
 	public Administrative getAdministrative(Person user){
 		// Search administratives
 		for (Administrative admin : _administratives)
@@ -168,6 +88,10 @@ public class School implements Serializable {
 		return null;
 	}
 
+	/**
+	 * @param user
+	 * @return a Professor if user is a professor
+	 */
 	public Professor getProfessor(Person user){
 		// Search professors
 		for (Professor prof : _professors)
@@ -176,6 +100,10 @@ public class School implements Serializable {
 		return null;
 	}
 
+	/**
+	 * @param user
+	 * @return a Student if user is a student
+	 */
 	public Student getStudent(Person user){
 		// Search student
 		for(Course c : _courses)
@@ -185,6 +113,10 @@ public class School implements Serializable {
 		return null;
 	}
 
+	/**
+ 	* @param user
+ 	* @return true if user is a representative, otherwise false 
+ 	*/
 	public boolean isRepresentative(Person user){
 		// Search student
 		for(Course c : _courses)			
@@ -193,9 +125,12 @@ public class School implements Serializable {
 		return false;
 	}
 
-	// FIXME implement other methods
+	/**
+	 * @param name
+	 * @return List of Persons with given name
+	 */
 	public List<Person> searchPerson(String name) {
-		ArrayList<Person> matches = new ArrayList<Person>();
+		LinkedList<Person> matches = new LinkedList<Person>();
 		// Search student
 		for(Course c : _courses)
 			for(Student s : c.getStudents())
@@ -213,6 +148,10 @@ public class School implements Serializable {
 		return matches;
 	}
 
+	/**
+	 * @param id
+	 * @return Person with given id
+	 */
 	public Person searchPerson(int id) {
 		Person person;
 		// search professor list
@@ -232,7 +171,10 @@ public class School implements Serializable {
 		return null;								
 	}
 	
-
+	/**
+	 * @param p
+	 * @return String with person's details
+	 */
 	public String showPerson(Person p) {
 		if (getAdministrative(p) != null)
 			return p.toString()+"\n";
@@ -260,8 +202,11 @@ public class School implements Serializable {
 		return info;
 	}
 
+	/**
+	 * @return List of String with all persons's details
+	 */
 	public List<String> showAllPersons(){		
-		ArrayList<String> people = new ArrayList<String>();
+		LinkedList<String> people = new LinkedList<String>();
 		// Index all professors
 		for (Professor prof : _professors)
 			people.add(showPerson(prof));				
@@ -279,7 +224,10 @@ public class School implements Serializable {
 		return people;
 	}
 	
-
+	/**
+	 * @param s
+	 * @return course of student
+	 */
 	private Course getStudentCourse(Student s){
 		for (Course c : _courses)
 			if (c.getStudent(s.getId()) != null)
@@ -287,22 +235,30 @@ public class School implements Serializable {
 		return null;			
 	}
 
-
+	/**
+	 * @param p
+	 * @return String with student info
+	 */
 	private String showStudent(Person p) {
 		return "ALUNO|" + p.toString();
 	}
+
+	/**
+ 	* @param p
+ 	* @return String with representative info
+ 	*/
 	private String showRepresentative(Person p) {
 		return "DELEGADO|" + p.toString();
 	}
-
-	private String getStudentDisciplines(Person p) {
-		return "DELEGADO|" + p.toString();
-	}
-
-	private String getProfessorDisciplines(Professor p) {
-		return "DELEGADO|" + p.toString();
-	}
-
+	
+	/**
+	 * Creates project in Subject if none exists with same name
+	 * @param user
+	 * @param subjectName
+	 * @param projectName
+	 * @throws IllegalDisciplineException
+	 * @throws IllegalProjectNameException
+	 */
 	public void createProject(Person user, String subjectName, String projectName) throws IllegalDisciplineException, IllegalProjectNameException {
 		Professor prof = getProfessor(user);
 		Subject subject;	
@@ -312,6 +268,14 @@ public class School implements Serializable {
 		subject.addProject(projectName);
 	}
 
+	/**
+ 	* Closes project in subject if one with the given name exists
+ 	* @param user
+ 	* @param subjectName
+ 	* @param projectName
+ 	* @throws IllegalDisciplineException
+ 	* @throws NoSuchProjectNameException
+ 	*/
 	public void closeProject(Person user, String subjectName, String projectName) throws IllegalDisciplineException, NoSuchProjectNameException {
 		Professor prof = getProfessor(user);
 		Subject subject;	
@@ -321,9 +285,17 @@ public class School implements Serializable {
 		subject.closeProject(projectName);
 	}
 
+
+	/**
+	 * 
+	 * @param user
+	 * @param subjectName
+	 * @return List of strings with students info that are inrolled in subject
+	 * @throws IllegalDisciplineException
+	 */
 	public List<String> showDisciplineStudents(Person user, String subjectName) throws IllegalDisciplineException{
 		Subject subject;			
-		ArrayList<String> students = new ArrayList<String>();
+		LinkedList<String> students = new LinkedList<String>();
 		Professor prof = getProfessor(user);
 		
 		if((subject = prof.getDiscipline(subjectName)) == null)
@@ -335,14 +307,11 @@ public class School implements Serializable {
 					students.add(showPerson(s));
 			break;			
 		}
-				
-			
-		
+		Collections.sort(students, new PeopleSorter());
 		return students;
 	}
 
-	
-	
+		
 	class PeopleSorter implements Comparator<String> {
 		
 		public int compare(String s1, String s2){
@@ -357,4 +326,119 @@ public class School implements Serializable {
 
 	}
 
+	/**  Builds objects from text file */
+	class FileImporter{
+		transient private Student _tempStudent;
+		transient private Professor _tempProf;
+		transient private boolean _isRep;
+
+		/**
+		* Reads a file and creates appropriate objects
+	 	* @param filename
+	 	* @throws BadEntryException
+	 	* @throws IOException
+	 	*/
+		public void importFile(String filename) throws IOException, BadEntryException, FileNotFoundException { 
+			// exceptions
+			BufferedReader reader = new BufferedReader(new FileReader(filename));
+			String line;
+			while ((line = reader.readLine()) != null) {
+					String[] fields = line.split("\\|");
+					registerFromFields(fields);
+			}			
+			reader.close();
+		}
+
+		/**
+		 * Pattern matches 'fields' and calls respective factory functions
+		 * @param fields
+		 * @throws BadEntryException
+		 */
+		private void registerFromFields(String[] fields) throws BadEntryException {
+			// Regular expression pattern to match an agent.
+			Pattern patPerson = Pattern.compile("^(ALUNO|DELEGADO|DOCENTE|FUNCIONÁRIO)");
+			Pattern patSubject = Pattern.compile("^#.*$");
+
+			if (patPerson.matcher(fields[0]).matches() && fields.length == 4) {
+				registerPerson(fields);
+			} else if (patSubject.matcher(fields[0]).matches() && fields.length == 2) {
+				registerSubject(fields);
+			} else {
+				throw new BadEntryException(fields.toString());
+			}
+		}
+
+		/**
+		 * Builds a person object from 'fields'
+		 * @param fields
+		 * @throws BadEntryException
+		 */
+		private void registerPerson(String[] fields) throws BadEntryException { 
+			_tempProf = null;
+			_tempStudent = null;
+
+			if(fields == null)
+				throw new BadEntryException("registerPerson");
+
+			// Read fields
+			int id = Integer.parseInt(fields[1]);
+			String phoneNum = fields[2];
+			String name = fields[3];
+
+			// Create objects
+			if (fields[0].equals("DELEGADO")) {
+				_tempStudent = new Student(id, name, phoneNum);
+				_isRep = true;
+			} else if (fields[0].equals("ALUNO")) {
+				_tempStudent = new Student(id, name, phoneNum);
+			} else if (fields[0].equals("DOCENTE")) {
+				_tempProf = new Professor(id, name, phoneNum);
+				_professors.add(_tempProf);
+			} else if (fields[0].equals("FUNCIONÁRIO")) {
+				_administratives.add(new Administrative(id, name, phoneNum));
+			} else {
+				throw new BadEntryException(fields[0]);
+			}
+		}
+
+		/**
+		 * Builds Subject and Course objects from 'fields'
+		 * @param fields
+		 * @throws BadEntryException
+		 */
+		private void registerSubject(String[] fields) throws BadEntryException { 
+			
+			if(fields == null)
+				throw new BadEntryException("registerSubject");
+			
+				fields[0] = fields[0].replaceAll("# ", "");
+
+			Course course;
+			Subject subject;
+
+			// Create course if none exists
+			if ((course = searchCourse(fields[0])) == null) {
+				course = new Course(fields[0]);
+				_courses.add(course);
+			}
+
+			// Create subject if none exists in that course
+			if ((subject = searchSubject(course, fields[1])) == null)
+				subject = new Subject(fields[1]);
+
+			course.addSubject(subject);
+
+			if (_isRep) {
+				course.addRepresentative(_tempStudent);
+				_isRep = false;
+			}
+
+			if (_tempStudent != null) {
+				course.addStudent(_tempStudent);
+				_tempStudent.addSubject(subject);
+			} else if (_tempProf != null) {
+				_tempProf.addSubject(course, subject);
+			}
+		}
+	}
 }

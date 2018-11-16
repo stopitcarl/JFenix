@@ -16,27 +16,26 @@ import sth.exceptions.IllegalDisciplineException;
 import sth.exceptions.IllegalProjectNameException;
 import sth.exceptions.NoSuchProjectNameException;
 
-//FIXME import other classes if needed
 
 /**
  * The façade class.
  */
 public class SchoolManager {
-
-	// FIXME add object attributes if needed
+	/** School */
 	private School _school;
+	/** Logged in user */		
 	private Person _user;
+	/** File to be imported */	
 	private String _fileName;
 
-	// FIXME implement constructors if needed
 	public SchoolManager(){
 		_school = new School();
 	}
 
 	/**
+	 * Loads school data (students, professors, etc) from text file
 	 * @param datafile
 	 * @throws ImportFileException
-	 * @throws InvalidCourseSelectionException
 	 */
 	public void importFile(String datafile) throws ImportFileException {
 		try {
@@ -47,30 +46,31 @@ public class SchoolManager {
 	}
 
 	/**
-	 * @param datafile
+	 * Load school object from object file	
+	 * @param filename
 	 * @throws FileNotFoundException
-	 * @throws NoSuchPersonIdException
+	 * @throws ClassNotFoundException
+	 * @throws IOException
 	 * @throws NoSuchPersonIdException
 	 */
 	public void importSchoolFile(String filename) throws FileNotFoundException, ClassNotFoundException, IOException, NoSuchPersonIdException {
 		ObjectInputStream reader = new ObjectInputStream(
 										new BufferedInputStream(
 											new FileInputStream(filename)));
-		School newSchool = (School)reader.readObject();
-		login(_user.getId());
+		School newSchool = (School)reader.readObject();		
 		_school = newSchool;
+		login(_user.getId());
 		_fileName = filename;
 	}
 
 	
 	/**
 	 * @param id
-	 * @throws NoSuchPersonIdException
+	 * @throws NoSuchPersonIdException if user with given id is not in the school
 	 */
 	public void login(int id) throws NoSuchPersonIdException {
 		if ((_user = searchPerson(id)) == null)
-			throw new NoSuchPersonIdException(id);
-		
+			throw new NoSuchPersonIdException(id);		
 	}
 
 	/**
@@ -101,11 +101,17 @@ public class SchoolManager {
 		return _school.isRepresentative(_user) ;
 	}
 
-	// FIXME implement other methods (in general, one for each command in sth-app)
+	/**
+	 * @param num New phone number
+	 */
 	public void changePhoneNumber(String num) {		
 		_user.setPhoneNumber(num);
 	}
 
+	/**	 
+	 * @param name
+	 * @return String with with details on all the people whose name matches 'name'
+	 */
 	public String searchPerson(String name) {		
 		String results = "";
 		for(Person p: _school.searchPerson(name))
@@ -114,10 +120,17 @@ public class SchoolManager {
 		return results;
 	}
 
+	/**
+	 * @param id
+	 * @return Person with given id
+	 */
 	public Person searchPerson(int id) {
 		return _school.searchPerson(id);										
 	}
 
+	/**
+	 * @return List of String with all persons's details
+	 */
 	public String showAllPersons() {
 		String people = "";
 		for(String s : _school.showAllPersons())
@@ -125,35 +138,72 @@ public class SchoolManager {
 		return people;		 
 	}
 
+	/**
+ 	* 
+ 	* @return String with person's details
+ 	*/		
 	public String showPerson() {
 		return _school.showPerson(_user);
 	}
 
-
-	public String showPerson(int id) {
-		return "";
-	}
-
+	/**
+ 	* 
+ 	* @param subjectName
+ 	* @param projectName
+ 	* @param hours
+ 	* @param comment
+ 	*/		
 	public void answerSurvey(String subjectName, String projectName, int hours, String comment) {
-
+		// do nothing
 	}
 
+	/**
+ 	* 
+ 	* @param subjectName
+ 	* @param projectName
+ 	* @param answer
+ 	*/		
 	public void deliverProject(String subjectName, String projectName, String answer) {
-
+		// do nothing
 	}
 
+	/**
+	 * 
+	 * @param subjectName
+	 * @param projectName
+	 * @return
+	 */		
 	public List<Answer> showSurveyResults(String subjectName, String projectName) {
 		return null;
 	}
 
+	/**
+	 * Closes project with given projectName from subject with given subjectName
+	 * @param subjectName
+	 * @param projectName
+	 * @throws IllegalDisciplineException
+	 * @throws NoSuchProjectNameException
+	 */
 	public void closeProject(String subjectName, String projectName)throws IllegalDisciplineException, NoSuchProjectNameException {
 		_school.closeProject(_user, subjectName, projectName);
 	}
 
+	/**
+	 * Creates project with given projectName from subject with given subjectName
+	 * @param subjectName
+	 * @param projectName
+	 * @throws IllegalDisciplineException
+	 * @throws IllegalProjectNameException
+	 */
 	public void createProject(String subjectName, String projectName) throws IllegalDisciplineException, IllegalProjectNameException {
 		_school.createProject(_user, subjectName, projectName);
 	}
 
+	/**
+	 * @param subjectName
+	 * @return String of students enrolled in the subject with given subjectName
+	 * @throws IllegalDisciplineException
+	 */
 	public String showDisciplineStudents(String subjectName) throws  IllegalDisciplineException {
 		String students = "";
 		for(String s : _school.showDisciplineStudents(_user, subjectName))
@@ -161,38 +211,82 @@ public class SchoolManager {
 		return students;
 	}
 
-	public Map<Student, String> showProjectSubmissions(String subjectName, String projectName) {
+	/**
+ 	* 
+ 	* @param subjectName
+ 	* @param projectName
+ 	* @return
+ 	*/	
+	public Map<Student, String> showProjectSubmissions(String subjectName, String projectName) {	
 		return null;
 	}
 
+	/**
+	 * 
+	 * @param subjectName
+	 * @param projectName
+	 */				
 	public void cancelSurvey(String subjectName, String projectName) {
-
+		// do nothing			
 	}
 
+	/**
+	 * 
+	 * @param subjectName
+	 * @param projectName
+	 */
 	public void closeSurvey(String subjectName, String projectName) {
-
+		//	do nothing		
 	}
 
+	/**
+	 * 
+	 * @param subjectName
+	 * @param projectName
+	 */		
 	public void createSurvey(String subjectName, String projectName) {
-
+		// do nothing		
 	}
 
+	/**
+	 * 
+	 * @param subjectName
+	 * @param projectName
+	 */
 	public void finishSurvey(String subjectName, String projectName) {
-
+		// do nothing		
 	}
-
+	/**
+	 * 
+	 * @param subjectName
+	 * @param projectName
+	 */
 	public void openSurvey(String subjectName, String projectName) {
-
+		// do nothing		
 	}
 
-	public List<Survey> showDisciplineSurvey(String subjectName) {
+	/**
+	 * 
+	 * @param subjectName
+	 * @return
+	 */
+	public List<Survey> showDisciplineSurvey(String subjectName) {	
 		return null;
 	}
 
+	/**
+ 	* 
+ 	* @return true if a filename is already associated
+ 	*/
 	public boolean hasFileName(){
 		return _fileName != null;
 	}
 
+	/**
+ 	* write school object to file
+ 	* @throws FileNotFoundException
+ 	* @throws IOException
+ 	*/
 	public void save() throws FileNotFoundException, IOException {
 		ObjectOutputStream writer = new ObjectOutputStream(
 										new BufferedOutputStream(
@@ -201,12 +295,15 @@ public class SchoolManager {
 		writer.close();
 	}
 
+	/**
+ 	* Associates filename to object and saves school object to that file
+ 	* @param filename
+ 	* @throws FileNotFoundException
+ 	* @throws IOException
+ 	*/
 	public void save(String filename) throws FileNotFoundException, IOException  {		
 		_fileName = filename;
 		save();
 	}
-
-	public void open(String filename) {
-
-	}
+	
 }

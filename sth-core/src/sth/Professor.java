@@ -1,32 +1,53 @@
 package sth;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.Locale;
 import java.text.Collator;
 import java.util.Collections;
 
-public class Professor extends Person implements Serializable {	
-	TreeMap<Course ,ArrayList<Subject>> _taughtSubjects;
+/**
+ * Representation of Professor.
+ */
+public class Professor extends Person implements Serializable {
+	/** Map of courses and a list of their subjects */
+	private TreeMap<Course ,LinkedList<Subject>> _taughtSubjects;
 
+	/**
+	 * @param id person identifier
+	 * @param name person's name
+	 * @param phoneNumber person's phone number
+	 */
 	public Professor(int id, String name, String phoneNumber) {
 		super(id, name, phoneNumber);		
-		_taughtSubjects = new TreeMap<Course ,ArrayList<Subject>>();
+		_taughtSubjects = new TreeMap<Course ,LinkedList<Subject>>();
 	}
 
+	/**
+ 	* adds subject to the course's subject list
+ 	* @param course
+ 	* @param subject
+ 	*/
 	public void addSubject(Course course, Subject subject) {		
 		if (!_taughtSubjects.containsKey(course))
-			_taughtSubjects.put(course, new ArrayList<Subject>());		
+			_taughtSubjects.put(course, new LinkedList<Subject>());		
 		
 		_taughtSubjects.get(course).add(subject);
 	}
 
+	/**
+	 * @return list of courses taught by professor
+	 */
 	public List<Course> getCourses() {
-		return new ArrayList<Course>(_taughtSubjects.keySet());
+		return new LinkedList<Course>(_taughtSubjects.keySet());
 	}
 
+	/** 
+ 	* @param disciplineName
+ 	* @return discipline with name disciplinename
+ 	*/
 	public Subject getDiscipline(String disciplineName) {
 		for (Course course : _taughtSubjects.keySet()){
 			for(Subject subject : _taughtSubjects.get(course)){				
@@ -38,9 +59,11 @@ public class Professor extends Person implements Serializable {
 		return null;
 	}
 
-	 
-	public List<String> getClasses(){ // TODO: find a better way to do this
-		ArrayList<String> classes = new ArrayList<String>();
+	/**
+	 * @return List of String with course-subject pair
+	 */ 
+	public List<String> getClasses(){
+		LinkedList<String> classes = new LinkedList<String>();
 
 		for (Course course : _taughtSubjects.keySet())
 			for(Subject subject : _taughtSubjects.get(course))

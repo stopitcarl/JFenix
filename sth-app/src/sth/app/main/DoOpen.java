@@ -9,14 +9,13 @@ import sth.exceptions.NoSuchPersonIdException;
 import sth.app.exceptions.NoSuchPersonException;
 import sth.SchoolManager;
 
-//FIXME import other classes if needed
 
 /**
  * 4.1.1. Open existing document.
  */
 public class DoOpen extends Command<SchoolManager> {
 
-	// FIXME add input fields if needed
+	/** Name of file to be opened. */
 	Input<String> _fileName;
 
 	/**

@@ -12,7 +12,7 @@ import sth.SchoolManager;
  * 4.1.1. Save to file under current name (if unnamed, query for name).
  */
 public class DoSave extends Command<SchoolManager> {
-  
+  /** Name of file to be saved */
   Input<String> _fileName;
 
   /**

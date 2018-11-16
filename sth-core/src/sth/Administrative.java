@@ -3,13 +3,21 @@ package sth;
 import java.util.List;
 import java.io.Serializable;
 
+/**
+ * Representation of Administrative.
+ */
 public class Administrative extends Person implements Serializable{
-	private List<Course> _courses;
+	
 
+	/**
+	 * @param id Person identifier
+	 * @param name Person's name
+	 * @param phoneNumber Person's phone number 
+	 */
 	public Administrative(int id, String name, String phoneNumber) {
 		super(id, name, phoneNumber);
 	}
-
+	
 	@Override 
 	public String toString() {
 		return "FUNCIONÁRIO|" + super.toString();

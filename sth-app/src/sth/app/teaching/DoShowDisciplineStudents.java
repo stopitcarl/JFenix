@@ -7,14 +7,12 @@ import sth.SchoolManager;
 import sth.exceptions.IllegalDisciplineException;
 import sth.app.exceptions.NoSuchDisciplineException;
 
-//FIXME import other classes if needed
-
 /**
- * 4.3.4. Show course students.
+ * 4.3.4. Show discipline students.
  */
 public class DoShowDisciplineStudents extends Command<SchoolManager> {
 
-  //FIXME add input fields if needed
+  /** Name of discipline */
   Input<String> _disciplineName;
 
   /**

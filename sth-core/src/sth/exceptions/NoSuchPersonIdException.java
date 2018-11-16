@@ -3,7 +3,7 @@ package sth.exceptions;
 /** Exception thrown when the requested person does not exist. */
 public class NoSuchPersonIdException extends Exception {
 
-  /** Serial number for serialization. */
+  /** Class serial number. */
   private static final long serialVersionUID = 201809021324L;
 
   /** Person id. */

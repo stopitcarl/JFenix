@@ -16,9 +16,10 @@ import sth.app.exceptions.DuplicateProjectException;
  */
 public class DoCreateProject extends Command<SchoolManager> {
 
-  //FIXME add input fields if needed
-  Input<String> _projectName;
-  Input<String> _disciplineName;
+	/** Name of project to be created */
+	Input<String> _projectName;
+	/** Name of project's discipline */
+	Input<String> _disciplineName;
 
   	/**
    	* @param receiver
@@ -29,8 +30,8 @@ public class DoCreateProject extends Command<SchoolManager> {
     	_projectName = _form.addStringInput(Message.requestProjectName());    
   	}
 
-  /** @see pt.tecnico.po.ui.Command#execute() */
-  @Override
+  	/** @see pt.tecnico.po.ui.Command#execute() */
+  	@Override
 	public final void execute() throws DialogException {
     	_form.parse();
     	try{

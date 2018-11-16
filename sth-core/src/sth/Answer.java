@@ -6,7 +6,7 @@ public class Answer implements Serializable{
 	private String _comment;
 	
 	public Answer() {
-		// TODO Auto-generated constructor stub
+		// Do nothing
 	}
 
 }

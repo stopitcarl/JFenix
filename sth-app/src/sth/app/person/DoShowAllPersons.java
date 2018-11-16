@@ -10,8 +10,6 @@ import sth.SchoolManager;
  */
 public class DoShowAllPersons extends Command<SchoolManager> {
 
-  
-
   /**
    * @param receiver
    */

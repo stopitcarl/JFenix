@@ -1,29 +1,44 @@
 package sth;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.text.Collator;
 import java.util.Collections;
 
-
+/**
+ * Representation of Student.
+ */
 public class Student extends Person implements Serializable {
+	/** List of subjects */
 	private List<Subject> _subjects;
-	// private Representative _representative; // TODO: delete this
 
+	/**
+	 * @param id Person identifier
+	 * @param name Person's name
+	 * @param phoneNumber Person's phone number
+	 */
 	public Student(int id, String name, String phoneNumber) {
 		super(id, name, phoneNumber);
-		_subjects = new ArrayList<Subject>();
+		_subjects = new LinkedList<Subject>();
 	}
 
+	/**
+	 * adds subject to subjects list
+	 * @param subject
+	 */
 	public void addSubject(Subject subject) {
 		if (!_subjects.contains(subject))
 			_subjects.add(subject);
 	}
 
+	/**
+	 * @param course
+	 * @return List sorted strings with course - class pair
+	 */
 	public List<String> getClasses(Course course) {		
-		ArrayList<String> classes = new ArrayList<String>();
+		LinkedList<String> classes = new LinkedList<String>();
 		for(Subject sub : _subjects)
 			classes.add("* " + course.getName() + " - " + sub.getName());
 
@@ -31,6 +46,10 @@ public class Student extends Person implements Serializable {
 		return classes;
 	}
 
+	/**
+	 * @param subject
+	 * @return true if subject is enrolled in subject
+	 */
 	public boolean isEnrolledIn(Subject subject){
 		for (Subject s : _subjects)
 			if (s.equals(subject))
