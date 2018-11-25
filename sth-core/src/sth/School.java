@@ -144,7 +144,8 @@ public class School implements Serializable {
 		for (Person admin : _administratives)
 			if (admin.getName().contains(name))
 				matches.add(admin);
-
+		
+		Collections.sort(matches, new PeopleNameSorter());
 		return matches;
 	}
 
@@ -220,7 +221,7 @@ public class School implements Serializable {
 			for(Student st : c.getStudents())
 				people.add(showPerson(st));
 		
-		Collections.sort(people, new PeopleSorter());
+		Collections.sort(people, new PeopleIdSorter());
 		return people;
 	}
 	
@@ -307,12 +308,12 @@ public class School implements Serializable {
 					students.add(showPerson(s));
 			break;			
 		}
-		Collections.sort(students, new PeopleSorter());
+		Collections.sort(students, new PeopleIdSorter());
 		return students;
 	}
 
 		
-	class PeopleSorter implements Comparator<String> {
+	class PeopleIdSorter implements Comparator<String> {
 		
 		public int compare(String s1, String s2){
 			String[] fields1 = s1.split("\\|");
@@ -322,6 +323,19 @@ public class School implements Serializable {
 				return fields1[1].compareTo(fields2[1]);
 			else
 				return 0;
+		}
+
+	}
+
+	class PeopleNameSorter implements Comparator<Person> {
+		
+		public int compare(Person p1, Person p2){
+			final Collator instance = Collator.getInstance();
+			
+			// Make collator ignore the accents
+    		instance.setStrength(Collator.NO_DECOMPOSITION);
+    		
+    		return instance.compare(p1.getName(), p2.getName());
 		}
 
 	}
@@ -377,13 +391,16 @@ public class School implements Serializable {
 			_tempProf = null;
 			_tempStudent = null;
 
-			if(fields == null)
+			if(fields == null || fields.length != 4)
 				throw new BadEntryException("registerPerson");
 
 			// Read fields
 			int id = Integer.parseInt(fields[1]);
 			String phoneNum = fields[2];
 			String name = fields[3];
+			
+			if(searchPerson(id) != null)
+				throw new BadEntryException(fields[0]);
 
 			// Create objects
 			if (fields[0].equals("DELEGADO")) {

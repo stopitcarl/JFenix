@@ -1,4 +1,7 @@
 /BadEntryException.java/1.1/Sun Oct  7 10:12:12 2018//
+/IllegalDisciplineException.java/1.2/Fri Nov 16 00:22:30 2018//
+/IllegalProjectNameException.java/1.2/Fri Nov 16 00:22:30 2018//
 /ImportFileException.java/1.1/Sun Oct  7 10:12:12 2018//
-/NoSuchPersonIdException.java/1.1/Sun Oct  7 10:12:12 2018//
+/NoSuchPersonIdException.java/1.2/Fri Nov 16 00:22:30 2018//
+/NoSuchProjectNameException.java/1.2/Fri Nov 16 00:22:30 2018//
 D
