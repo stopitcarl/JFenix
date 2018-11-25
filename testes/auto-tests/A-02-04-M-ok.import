@@ -19,9 +19,9 @@ ALUNO|100013|123456789|José Manuel
 # Matemática|Probabilidades e Estatística
 # Matemática|Cálculo I
 # Matemática|Métodos Numéricos
-DOCENTE|100100|987654321|Zulmira Dias Maria
+DOCENTE|100100|987654321|Ana Maria
 # Informática|Análise e Síntese de Algoritmos
-DOCENTE|100104|987654321|Ana Maria
-# Informática|Análise e Síntese de Algoritmos
-# Matemática|Álgebra Linear
+# Informática|Compiladores
+# Informática|Engenharia de Software
+# Informática|Sistemas Operativos
 FUNCIONÁRIO|101010|789456123|José Carlos

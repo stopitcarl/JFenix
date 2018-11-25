@@ -4,13 +4,8 @@ Identificador: Menu principal
 3 - Portal Pessoal
 4 - Portal do Docente
 0 - Sair
-Escolha uma opção: Portal Pessoal
-1 - Mostrar pessoa
-2 - Alterar número de telefone
-3 - Mostrar pessoas
-4 - Procurar pessoa
-0 - Sair
-Escolha uma opção: Menu principal
+Escolha uma opção: Ficheiro a abrir: Abrir: Operação inválida: A pessoa com identificador 101011 não existe.
+Menu principal
 1 - Abrir
 2 - Guardar
 3 - Portal Pessoal
@@ -22,7 +17,8 @@ Escolha uma opção: Portal Pessoal
 3 - Mostrar pessoas
 4 - Procurar pessoa
 0 - Sair
-Escolha uma opção: DOCENTE|100100|987654321|Zulmira Dias Maria
+Escolha uma opção: FUNCIONÁRIO|100001|123789456|Maria José
+DOCENTE|101011|789456123|José Carlos
 Portal Pessoal
 1 - Mostrar pessoa
 2 - Alterar número de telefone

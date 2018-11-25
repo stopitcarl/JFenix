@@ -1,6 +1,7 @@
 package sth;
 
-import java.util.*;
+import java.util.Map;
+import java.util.List;
 import java.io.ObjectInputStream;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -15,6 +16,7 @@ import sth.exceptions.NoSuchPersonIdException;
 import sth.exceptions.IllegalDisciplineException;
 import sth.exceptions.IllegalProjectNameException;
 import sth.exceptions.NoSuchProjectNameException;
+import sth.exceptions.NoSuchPersonIdException;
 
 
 /**
@@ -54,13 +56,24 @@ public class SchoolManager {
 	 * @throws NoSuchPersonIdException
 	 */
 	public void importSchoolFile(String filename) throws FileNotFoundException, ClassNotFoundException, IOException, NoSuchPersonIdException {
+		
 		ObjectInputStream reader = new ObjectInputStream(
 										new BufferedInputStream(
 											new FileInputStream(filename)));
-		School newSchool = (School)reader.readObject();		
-		_school = newSchool;
-		login(_user.getId());
-		_fileName = filename;
+		School oldSchool = _school; // Save old school
+
+		/** Change active school only if:
+		 *  reader can read a valid school && login succeeds */
+		try{ 
+			School newSchool = (School)reader.readObject();							
+			reader.close();
+			_school = newSchool;	
+			login(_user.getId());
+			_fileName = filename;
+		} catch(NoSuchPersonIdException e){
+			_school = oldSchool;			
+			throw e;			
+		}		
 	}
 
 	
@@ -69,7 +82,10 @@ public class SchoolManager {
 	 * @throws NoSuchPersonIdException if user with given id is not in the school
 	 */
 	public void login(int id) throws NoSuchPersonIdException {
-		if ((_user = searchPerson(id)) == null)
+		Person newUser;
+		if ((newUser = searchPerson(id)) != null)		
+			_user = newUser;
+		else
 			throw new NoSuchPersonIdException(id);		
 	}
 

@@ -1,6 +1,7 @@
 package sth;
 
-import java.util.*;
+import java.util.Map;
+import java.util.TreeMap;
 import java.io.Serializable;
 
 /**
@@ -14,7 +15,7 @@ public class Project implements Serializable {
 	/** Project's state */
 	private boolean _isOpen;
 	/** Student's submissions */
-	private Map<Student, String> _submission;
+	private Map<Student, String> _submissions;
 	/** Project's survey */
 	private Survey _survey;
 	
@@ -24,6 +25,7 @@ public class Project implements Serializable {
 	public Project(String name) {
 		_name = name;
 		_isOpen = true;
+		_submissions = new TreeMap<Student, String>();
 	}
 
 	/**

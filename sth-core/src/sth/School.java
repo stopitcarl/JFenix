@@ -106,10 +106,12 @@ public class School implements Serializable {
 	 */
 	public Student getStudent(Person user){
 		// Search student
-		for(Course c : _courses)
-			for(Student s : c.getStudents())
-				if(user.equals(s))
-					return s;
+		Student s;
+		for(Course c : _courses){
+			s = c.getStudent(user.getId());
+			if(s != null && user.equals(s))
+				return s;
+		}
 		return null;
 	}
 
