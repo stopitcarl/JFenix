@@ -1,4 +1,4 @@
-public class SurveyState {
+public class abstract SurveyState {
     private Survey _survey;
 
     public SurveyState(Survey survey) {

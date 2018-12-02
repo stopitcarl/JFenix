@@ -12,7 +12,7 @@ public class OpenSurveyState extends SurveyState {
     }
 
     public void finalise() {
-        //Erro.
+        //Erro?
     }
 
     public void cancel() {

@@ -182,7 +182,7 @@ public class School implements Serializable {
 	public String showPerson(Person p) { // TODO: move all the '\n' to SchoolManager
 		PersonShower ps = new PersonShower();
 		if (getAdministrative(p) != null)
-			return p.toString() + "\n";
+			return p.accept(ps);
 		
 		String info = "";
 		Student st; 
@@ -191,12 +191,11 @@ public class School implements Serializable {
 
 		
 		if((st = getStudent(p)) != null){
-			info += st.toString();
+			info += st.accept(ps);
 			classes = st.getClasses(); 
 		} else {
 			prof = getProfessor(p);
-			info += prof.toString() + "\n";
-			classes = prof.getClasses();
+			info += prof.accept(ps);
 		}
 
 		Collections.sort(classes, Collator.getInstance(Locale.getDefault()));
