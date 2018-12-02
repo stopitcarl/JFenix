@@ -17,7 +17,7 @@ public class Survey implements Serializable {
 	private SurveyState _state = new CreatedSurveyState();
 
 	public Survey() {
-		// do nothing
+		// TODO: init vars
 	}
 
 	public void setState(SurveyState state) {
