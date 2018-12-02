@@ -64,11 +64,21 @@ public class Student extends Person implements Serializable {
 	public boolean isEnrolledIn(Subject subject){		
 		return _subjects.containsKey(subject.getName());
 	}
-/*
+	
+	/*
 	public List<String> accept(){
 
 	}
-*/
+
+	*/
+
+	/**	 
+	 * @return Person's string
+	 */
+	public String accept(Visitor v) {
+		return v.showPerson(this);
+	}
+
 	@Override
 	public String toString(){
 		if (_course.isRepresentative(this))

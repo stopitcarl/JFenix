@@ -17,6 +17,13 @@ public class Administrative extends Person implements Serializable{
 	public Administrative(int id, String name, String phoneNumber) {
 		super(id, name, phoneNumber);
 	}
+
+	/**	 
+	 * @return Person's string
+	 */
+	public String accept(Visitor v) {
+		return v.showPerson(this);
+	}
 	
 	@Override 
 	public String toString() {

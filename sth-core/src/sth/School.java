@@ -180,8 +180,8 @@ public class School implements Serializable {
 	 * @return String with person's details
 	 */
 	public String showPerson(Person p) { // TODO: move all the '\n' to SchoolManager
-		
-	if (getAdministrative(p) != null)
+		PersonShower ps = new PersonShower();
+		if (getAdministrative(p) != null)
 			return p.toString() + "\n";
 		
 		String info = "";
@@ -189,8 +189,9 @@ public class School implements Serializable {
 		Professor prof;
 		List<String> classes;
 
+		
 		if((st = getStudent(p)) != null){
-			info += st.toString() + "\n";
+			info += st.toString();
 			classes = st.getClasses(); 
 		} else {
 			prof = getProfessor(p);
