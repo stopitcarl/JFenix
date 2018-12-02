@@ -1,12 +1,6 @@
 package sth;
 
 
-interface Visitor{
-    public String showPerson(Student s);
-    public String showPerson(Professor s);
-    public String showPerson(Administrative s);
-
-}
 public class PersonShower implements Visitor {
 
     public String showPerson(Student s){

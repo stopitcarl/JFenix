@@ -61,6 +61,11 @@ public abstract class Person implements Serializable {
 	public int getId() {
 		return _id;
 	}
+
+	/**	 
+	 * @return Person's identifier
+	 */
+	public abstract String accept(Visitor v);
 	
 	@Override 
 	public boolean equals(Object o) {

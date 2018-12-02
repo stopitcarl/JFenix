@@ -77,6 +77,13 @@ public class Professor extends Person implements Serializable {
 		return classes;
 	}
 
+	/**	 
+	 * @return Person's string
+	 */
+	public String accept(Visitor v) {
+		return v.showPerson(this);
+	}
+
 	@Override 
 	public String toString() {
 		return "DOCENTE|" + super.toString();
