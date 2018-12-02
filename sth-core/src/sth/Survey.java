@@ -13,25 +13,31 @@ public class Survey implements Serializable {
 	private State _state;
 	/** List of students */
 	private List<Student> _students;
+	/** Survey's state */
+	private SurveyState _state = new CreatedSurveyState();
 
 	public Survey() {
 		// do nothing
 	}
 
+	public void setState(SurveyState state) {
+		_state = state;
+	}
+
 	public void cancel() {
-		// do nothing
+		_state.cancel();
 	}
 
 	public void close() {
-		// do nothing
+		_state.close();
 	}
 
 	public void open() {
-		// do nothing
+		_state.open();
 	}
 
-	public void end() {
-		// do nothing
+	public void finalise() {
+		_state.finalise();
 	}
 
 	public List<Answer> getResults() { 
