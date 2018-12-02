@@ -1,9 +1,11 @@
 package sth;
 
 import java.io.Serializable;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.TreeMap;
+import java.util.Map;
 import java.text.Collator;
 import java.util.Collections;
 
@@ -11,8 +13,10 @@ import java.util.Collections;
  * Representation of Student.
  */
 public class Student extends Person implements Serializable {
+	
 	/** List of subjects */
-	private List<Subject> _subjects;
+	private Map<String, Subject> _subjects;
+	private Course _course;
 
 	/**
 	 * @param id Person identifier
@@ -21,7 +25,15 @@ public class Student extends Person implements Serializable {
 	 */
 	public Student(int id, String name, String phoneNumber) {
 		super(id, name, phoneNumber);
-		_subjects = new LinkedList<Subject>();
+		_subjects = new TreeMap<String, Subject>();
+	}
+
+	/**
+	 * Sets student course to course
+	 * @param course
+	 */
+	public void setCourse(Course course) {
+		_course = course;
 	}
 
 	/**
@@ -29,20 +41,19 @@ public class Student extends Person implements Serializable {
 	 * @param subject
 	 */
 	public void addSubject(Subject subject) {
-		if (!_subjects.contains(subject))
-			_subjects.add(subject);
+		if (!_subjects.containsKey(subject.getName()))
+			_subjects.put(subject.getName(), subject);
 	}
 
 	/**
 	 * @param course
 	 * @return List sorted strings with course - class pair
 	 */
-	public List<String> getClasses(Course course) {		
-		LinkedList<String> classes = new LinkedList<String>();
-		for(Subject sub : _subjects)
-			classes.add("* " + course.getName() + " - " + sub.getName());
+	public List<String> getClasses() {		
+		ArrayList<String> classes = new ArrayList<String>(_subjects.keySet().size());
+		for(String sub : _subjects.keySet())
+			classes.add("* " + _course.getName() + " - " + sub);
 
-		Collections.sort(classes, Collator.getInstance(Locale.getDefault()));
 		return classes;
 	}
 
@@ -50,13 +61,21 @@ public class Student extends Person implements Serializable {
 	 * @param subject
 	 * @return true if subject is enrolled in subject
 	 */
-	public boolean isEnrolledIn(Subject subject){
-		for (Subject s : _subjects)
-			if (s.equals(subject))
-				return true;
-		return false;
+	public boolean isEnrolledIn(Subject subject){		
+		return _subjects.containsKey(subject.getName());
 	}
-	
+/*
+	public List<String> accept(){
+
+	}
+*/
+	@Override
+	public String toString(){
+		if (_course.isRepresentative(this))
+			return "DELEGADO|" + super.toString();
+		else
+			return "ALUNO|" + super.toString();
+	}
 	
 	/*
 	 * public void submitSurv(Answer answer, Survey s) {

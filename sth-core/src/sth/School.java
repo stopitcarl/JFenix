@@ -173,32 +173,32 @@ public class School implements Serializable {
 
 		return null;								
 	}
-	
+
+
 	/**
 	 * @param p
 	 * @return String with person's details
 	 */
-	public String showPerson(Person p) {
-		if (getAdministrative(p) != null)
-			return p.toString()+"\n";
+	public String showPerson(Person p) { // TODO: move all the '\n' to SchoolManager
+		
+	if (getAdministrative(p) != null)
+			return p.toString() + "\n";
 		
 		String info = "";
-		Student st;
+		Student st; 
 		Professor prof;
 		List<String> classes;
 
 		if((st = getStudent(p)) != null){
-			if(isRepresentative(p))
-				info += showRepresentative(p)+ "\n";
-			else 
-				info += showStudent(p) + "\n";
-			classes = st.getClasses(getStudentCourse(st));
+			info += st.toString() + "\n";
+			classes = st.getClasses(); 
 		} else {
 			prof = getProfessor(p);
 			info += prof.toString() + "\n";
 			classes = prof.getClasses();
 		}
 
+		Collections.sort(classes, Collator.getInstance(Locale.getDefault()));
 		for(String s : classes)
 			info += s + "\n";
 		
@@ -238,21 +238,6 @@ public class School implements Serializable {
 		return null;			
 	}
 
-	/**
-	 * @param p
-	 * @return String with student info
-	 */
-	private String showStudent(Person p) {
-		return "ALUNO|" + p.toString();
-	}
-
-	/**
- 	* @param p
- 	* @return String with representative info
- 	*/
-	private String showRepresentative(Person p) {
-		return "DELEGADO|" + p.toString();
-	}
 	
 	/**
 	 * Creates project in Subject if none exists with same name
@@ -332,9 +317,9 @@ public class School implements Serializable {
 	class PeopleNameSorter implements Comparator<Person> {
 		
 		public int compare(Person p1, Person p2){
-			final Collator instance = Collator.getInstance();
+			final Collator instance = Collator.getInstance();			
 			
-			// Make collator ignore the accents
+			// Make collator ignore the accentuation
     		instance.setStrength(Collator.NO_DECOMPOSITION);
     		
     		return instance.compare(p1.getName(), p2.getName());
@@ -430,7 +415,7 @@ public class School implements Serializable {
 			if(fields == null)
 				throw new BadEntryException("registerSubject");
 			
-				fields[0] = fields[0].replaceAll("# ", "");
+			fields[0] = fields[0].replaceAll("# ", "");
 
 			Course course;
 			Subject subject;
@@ -442,11 +427,11 @@ public class School implements Serializable {
 			}
 
 			// Create subject if none exists in that course
-			if ((subject = searchSubject(course, fields[1])) == null)
+			if ((subject = searchSubject(course, fields[1])) == null){
 				subject = new Subject(fields[1]);
-
-			course.addSubject(subject);
-
+				course.addSubject(subject);				
+			}
+			
 			if (_isRep) {
 				course.addRepresentative(_tempStudent);
 				_isRep = false;
@@ -455,6 +440,7 @@ public class School implements Serializable {
 			if (_tempStudent != null) {
 				course.addStudent(_tempStudent);
 				_tempStudent.addSubject(subject);
+				_tempStudent.setCourse(course);			
 			} else if (_tempProf != null) {
 				_tempProf.addSubject(course, subject);
 			}
