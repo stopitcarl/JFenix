@@ -19,15 +19,15 @@ public class Course implements Comparable<Course>,  Serializable {
 	/** Course's name */
 	private String _name;
 	/** List of representatives */
-	private LinkedList<Student> _representatives;
+	private TreeMap<Integer, Student> _representatives;
 
 	/**
 	 * @param name Course's name 
 	 */
 	public Course(String name) {
 		_name = name;
-		_subjects = new LinkedList<Subject>();
-		_representatives = new LinkedList<Student>();
+		_subjects = new LinkedList<Subject>(); // TODO: mapify this?
+		_representatives = new TreeMap<Integer, Student>();
 		_students = new TreeMap<Integer, Student>();
 	}
 
@@ -71,7 +71,7 @@ public class Course implements Comparable<Course>,  Serializable {
 	}
 
 	/**
-	 * adds subject s to list of subjects
+	 * adds subject 's' to list of subjects
 	 * @param s
 	 */
 	public void addSubject(Subject s) {
@@ -80,31 +80,31 @@ public class Course implements Comparable<Course>,  Serializable {
 	}
 
 	/**
- 	* @param p
- 	* @return true if person is representative
+ 	* @param personId
+ 	* @return true if person is representative of the course
  	*/
-	public boolean isRepresentative(Person p){
-		for(Student rep: _representatives)
-			if(rep.equals(p))
-				return true;		
-		return false;
+	public boolean isRepresentative(integer personId){
+		if(_representatives.get(personId) != null)
+			return true;		
+		else
+			return false;
 	}
 
 	/**
-	 * adds student s to representative list
+	 * adds student 's' to representative list
 	 * @param s
 	 */
 	public void addRepresentative(Student s) {
 		if(_representatives.size() < MAX_REPRESENTATIVE)
-			_representatives.add(s);
+			_representatives.put(s.getId(), s);
 	}
 
 	/**
-	 * removes student s from representative list
+	 * removes student 's' from representative list
 	 * @param s
 	 */
-	public void removeRepresentative(Student s) {		
-			_representatives.remove(s);
+	public void removeRepresentative(int personId) {		
+			_representatives.remove(personId);
 	}
 
 	public int compareTo(Course c){

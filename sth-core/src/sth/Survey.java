@@ -10,7 +10,7 @@ public class Survey implements Serializable {
 	/** List of answers */
 	private List<Answer> _answers;
 	/** Project's state */
-	private State _state;
+	private State _projectState;
 	/** List of students */
 	private List<Student> _students;
 	/** Survey's state */

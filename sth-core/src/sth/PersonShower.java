@@ -1,24 +1,37 @@
 package sth;
 
+import java.util.List;
+import java.text.Collator;
+import java.util.Collections;
+import java.util.Locale;
 
 public class PersonShower implements Visitor {
 
     public String showPerson(Student s){
-        String info = s.toString();
-        for(String classes : s.getClasses())
-            info +=  "\n" + classes;
+        String info = s.toString();        
+        
+        List<String> subjects =  s.getClasses();  
+        sort(subjects);
+        for(String subject : subjects)
+            info +=  "\n" + subject;
         return info + "\n";        
     }
 
     public String showPerson(Professor p){
         String info = p.toString(); 
-        for(String classes : p.getClasses())
-            info +=  "\n" + classes;
-        return info + "\n";        
 
+        List<String> subjects =  p.getClasses();  
+        sort(subjects);
+        for(String subject : subjects)
+            info +=  "\n" + subject;
+        return info + "\n";
     }
 
     public String showPerson(Administrative a){       
         return a.toString() + "\n";        
+    }
+
+    private void sort(List<String> list){
+        Collections.sort(list, Collator.getInstance(Locale.getDefault()));
     }
 }
