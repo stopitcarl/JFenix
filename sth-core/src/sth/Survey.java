@@ -1,23 +1,27 @@
 package sth;
 
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 import java.io.Serializable;
 
 /**
  * Representation of Survey.
  */
 public class Survey implements Serializable {
+	
 	/** List of answers */
 	private List<Answer> _answers;
-	/** Project's state */
-	private State _projectState;
-	/** List of students */
-	private List<Student> _students;
+	/** Map of students */
+	private Map<Integer, Student> _students;
 	/** Survey's state */
-	private SurveyState _state = new CreatedSurveyState(this);
+	private SurveyState _state;
 
 	public Survey() {
-		// TODO: init vars
+		_answers = new ArrayList<Answer>();
+		_students = new TreeMap<Integer, Student>();
+		_state = new CreatedSurveyState(this);
 	}
 
 	public void setState(SurveyState state) {
@@ -41,6 +45,6 @@ public class Survey implements Serializable {
 	}
 
 	public List<Answer> getResults() { 
-		return null;
+		return _answers;
 	}
 }

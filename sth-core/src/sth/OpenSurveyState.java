@@ -20,7 +20,7 @@ public class OpenSurveyState extends SurveyState {
         //Erro?
     }
 
-    public void cancel() {
-        //Apaga o survey.
+    public void cancel() { // TODO: throw NonEmptySurveyException 
+        //Apaga o survey
     }
 }

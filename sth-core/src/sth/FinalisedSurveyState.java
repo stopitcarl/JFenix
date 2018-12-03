@@ -20,7 +20,7 @@ public class FinalisedSurveyState extends SurveyState {
         //Do nothing.
     }
 
-    public void cancel() {
+    public void cancel() { // TODO: throw SurveyFinishedException
         //Erro.
     }
 }

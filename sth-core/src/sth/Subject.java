@@ -1,8 +1,11 @@
 package sth;
 
 import java.io.Serializable;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
+import java.util.Map;
+
 import sth.exceptions.IllegalProjectNameException;
 import sth.exceptions.NoSuchProjectNameException;
 
@@ -12,8 +15,8 @@ import sth.exceptions.NoSuchProjectNameException;
 public class Subject implements Serializable{
 	/** Subject's name */
 	private String _name;
-	/** List of projects */
-	private List<Project> _projects;
+	/** Map of project name and projects */
+	private Map<String, Project> _projects;
 	/** list of subscriptions */ 
 	private List<Person> _subscriptions;
 
@@ -22,8 +25,8 @@ public class Subject implements Serializable{
  	*/
 	public Subject(String name) {
 		_name = name;
-		_projects = new LinkedList<Project>();
-		_subscriptions = new LinkedList<Person>();
+		_projects = new TreeMap<String, Project>();
+		_subscriptions = new ArrayList<Person>();
 	}
 
 	/**
@@ -38,7 +41,14 @@ public class Subject implements Serializable{
 	 * @return List of projects
 	 */
 	public List<Project> getProjects() {
-		return _projects;		
+		return new ArrayList<Project>(_projects.values());		
+	}
+
+	/**
+	 * @return List of projects
+	 */
+	public Project getProject(String projectName) {
+		return _projects.get(projectName);
 	}
 	
 	/**
@@ -47,10 +57,10 @@ public class Subject implements Serializable{
 	 * @throws IllegalProjectNameException
 	 */
 	 public void addProject(String projectName) throws IllegalProjectNameException {
-		for (Project p : _projects)
-			if(projectName.equals(p.getName()))
-				throw new IllegalProjectNameException(projectName, _name);
-		 _projects.add(new Project(projectName)); 
+		if(_projects.get(projectName) != null)
+			throw new IllegalProjectNameException(projectName, _name);
+		else 
+		 	_projects.put(projectName, new Project(projectName)); 
 	}
 	 
 	/**
@@ -59,12 +69,13 @@ public class Subject implements Serializable{
 	 * @throws NoSuchProjectNameException
 	 */
 	 public void closeProject(String projectName) throws NoSuchProjectNameException { 
-		for (Project p : _projects)
-			if(projectName.equals(p.getName())){
-				p.closeProject();
-				return;
-			}
-		throw new NoSuchProjectNameException(projectName, _name);
+		Project project  = _projects.get(projectName);		
+		
+		if (project != null) {
+			project.closeProject();
+			return;
+		} else
+			throw new NoSuchProjectNameException(projectName, _name);
 	}
 	
 	/*
