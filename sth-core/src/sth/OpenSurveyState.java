@@ -1,3 +1,8 @@
+package sth;
+
+import java.io.Serializable;
+
+
 public class OpenSurveyState extends SurveyState {
     public OpenSurveyState(Survey survey) {
         super(survey);
@@ -8,7 +13,7 @@ public class OpenSurveyState extends SurveyState {
     }
 
     public void close() {
-        getSurvey().setState(new CloseSurveyState(getSurvey()));
+        getSurvey().setState(new ClosedSurveyState(getSurvey()));
     }
 
     public void finalise() {

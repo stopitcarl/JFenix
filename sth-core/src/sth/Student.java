@@ -81,7 +81,7 @@ public class Student extends Person implements Serializable {
 
 	@Override
 	public String toString(){
-		if (_course.isRepresentative(this))
+		if (_course.isRepresentative(this.getId()))
 			return "DELEGADO|" + super.toString();
 		else
 			return "ALUNO|" + super.toString();
