@@ -117,12 +117,12 @@ public class School implements Serializable {
 
 	/**
  	* @param user
- 	* @return true if user is a representative, otherwise false 
+ 	* @return true if user is a representative, otherwise false
  	*/
 	public boolean isRepresentative(Person user){
 		// Search student
 		for(Course c : _courses)			
-				if (c.isRepresentative(user))
+				if (c.isRepresentative(user.getId()))
 					return true;
 		return false;
 	}
@@ -179,30 +179,15 @@ public class School implements Serializable {
 	 * @param p
 	 * @return String with person's details
 	 */
-	public String showPerson(Person p) { // TODO: move all the '\n' to SchoolManager
+	public String showPerson(Person p) { 		
 		PersonShower ps = new PersonShower();
-		if (getAdministrative(p) != null)
+				
+		if (getAdministrative(p) != null) // If its administrative
 			return p.accept(ps);
-		
-		String info = "";
-		Student st; 
-		Professor prof;
-		List<String> classes;
-
-		
-		if((st = getStudent(p)) != null){
-			info += st.accept(ps);
-			classes = st.getClasses(); 
-		} else {
-			prof = getProfessor(p);
-			info += prof.accept(ps);
-		}
-
-		Collections.sort(classes, Collator.getInstance(Locale.getDefault()));
-		for(String s : classes)
-			info += s + "\n";
-		
-		return info;
+		if(getStudent(p) != null)
+			return p.accept(ps);
+		else 
+			return p.accept(ps);
 	}
 
 	/**
