@@ -12,11 +12,15 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
+
 import sth.exceptions.BadEntryException;
 import sth.exceptions.NoSuchPersonIdException;
 import sth.exceptions.IllegalDisciplineException;
 import sth.exceptions.IllegalProjectNameException;
 import sth.exceptions.NoSuchProjectNameException;
+import sth.exceptions.TooManySurveysException;
+
+// TODO: search people and retrieve peopel by id, not by object
 
 /**
  * School implementation.
@@ -258,6 +262,48 @@ public class School implements Serializable {
 		subject.closeProject(projectName);
 	}
 
+	public void createSurvey(Person user, String subjectName, String projectName) 
+							throws IllegalDisciplineException, NoSuchProjectNameException, TooManySurveysException {
+		Student student = getStudent(user);
+
+		if (!isRepresentative(user) && student != null)
+			return; // TODO: consider this situation more carefully
+		
+		Course course = student.getCourse();
+		Subject subject;
+		Project project;
+		
+		// Check if subject exists
+		if ( (subject = course.getSubject(subjectName)) != null ){		
+			if ( (project = subject.getProject(projectName)) != null)
+				project.createSurvey();
+			else
+				throw new NoSuchProjectNameException(projectName, subjectName);
+		} else
+			throw new IllegalDisciplineException(subjectName);
+	}
+
+	public void cancelSurvey(Person user, String subjectName, String projectName) 
+							throws IllegalDisciplineException, NoSuchProjectNameException {
+		Student student = getStudent(user);
+
+		if (!isRepresentative(user) && student != null)
+			return; // TODO: consider this situation more carefully
+		
+		Course course = student.getCourse();
+		Subject subject;
+		Project project;
+		
+		// Check if subject exists
+		if ( (subject = course.getSubject(subjectName)) != null ){		
+			if ( (project = subject.getProject(projectName)) != null) {
+				Survey survey = project.getSurvey();
+				survey.cancel();				
+			} else
+				throw new NoSuchProjectNameException(projectName, subjectName);
+		} else
+			throw new IllegalDisciplineException(subjectName);
+	}
 
 	/**
 	 * 

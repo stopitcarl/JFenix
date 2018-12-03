@@ -45,6 +45,10 @@ public class Student extends Person implements Serializable {
 			_subjects.put(subject.getName(), subject);
 	}
 
+	public Course getCourse() {
+		return _course;
+	}
+
 	/**
 	 * @param course
 	 * @return List sorted strings with course - class pair

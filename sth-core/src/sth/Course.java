@@ -1,7 +1,7 @@
 package sth;
 
 import java.io.Serializable;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -13,7 +13,7 @@ public class Course implements Comparable<Course>,  Serializable {
 	/* Maximum number of representatives */
 	private int MAX_STUDENTS = 200;
 	/** List of subjects */
-	private List<Subject> _subjects;
+	private Map<String, Subject> _subjects;
 	/** Map of students and their id */
 	private Map<Integer ,Student> _students;
 	/** Course's name */
@@ -26,7 +26,7 @@ public class Course implements Comparable<Course>,  Serializable {
 	 */
 	public Course(String name) {
 		_name = name;
-		_subjects = new LinkedList<Subject>(); // TODO: mapify this?
+		_subjects = new TreeMap<String, Subject>();
 		_representatives = new TreeMap<Integer, Student>();
 		_students = new TreeMap<Integer, Student>();
 	}
@@ -42,15 +42,21 @@ public class Course implements Comparable<Course>,  Serializable {
 	 * @return list of subjects
 	 */
 	public List<Subject> getSubjects() {
-		return _subjects;
+		return new ArrayList<Subject>(_subjects.values());
 	}
 
+	/**
+	 * @return Subject with given name
+	 */
+	public Subject getSubject(String subjectName) {
+		return _subjects.get(subjectName);
+	}
 
 	/**
 	 * @return list of students
 	 */
 	public List<Student> getStudents() {
-		return new LinkedList<Student>(_students.values());
+		return new ArrayList<Student>(_students.values());
 	} 
 
 	/** 
@@ -75,8 +81,8 @@ public class Course implements Comparable<Course>,  Serializable {
 	 * @param s
 	 */
 	public void addSubject(Subject s) {
-		if (!_subjects.contains(s))
-			_subjects.add(s);
+		if (!_subjects.containsKey(s.getName()))
+			_subjects.put(s.getName(), s);
 	}
 
 	/**

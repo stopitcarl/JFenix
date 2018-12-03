@@ -17,12 +17,14 @@ import sth.exceptions.IllegalDisciplineException;
 import sth.exceptions.IllegalProjectNameException;
 import sth.exceptions.NoSuchProjectNameException;
 import sth.exceptions.NoSuchPersonIdException;
+import sth.exceptions.TooManySurveysException;
 
 
 /**
  * The façade class.
  */
 public class SchoolManager {
+	
 	/** School */
 	private School _school;
 	/** Logged in user */		
@@ -242,8 +244,9 @@ public class SchoolManager {
 	 * @param subjectName
 	 * @param projectName
 	 */				
-	public void cancelSurvey(String subjectName, String projectName) {
-		// do nothing			
+	public void cancelSurvey(String subjectName, String projectName) 
+							throws IllegalDisciplineException, NoSuchProjectNameException, TooManySurveysException {		
+		_school.cancelSurvey(_user, subjectName, projectName);
 	}
 
 	/**
@@ -260,10 +263,10 @@ public class SchoolManager {
 	 * @param subjectName
 	 * @param projectName
 	 */		
-	public void createSurvey(String subjectName, String projectName) {
-		// do nothing		
+	public void createSurvey(String subjectName, String projectName) 
+							throws IllegalDisciplineException, NoSuchProjectNameException, TooManySurveysException {		
+		_school.createSurvey(_user, subjectName, projectName);
 	}
-
 	/**
 	 * 
 	 * @param subjectName
