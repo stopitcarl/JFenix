@@ -83,7 +83,7 @@ public class Course implements Comparable<Course>,  Serializable {
  	* @param personId
  	* @return true if person is representative of the course
  	*/
-	public boolean isRepresentative(integer personId){
+	public boolean isRepresentative(int personId){
 		if(_representatives.get(personId) != null)
 			return true;		
 		else

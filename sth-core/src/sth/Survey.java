@@ -14,7 +14,7 @@ public class Survey implements Serializable {
 	/** List of students */
 	private List<Student> _students;
 	/** Survey's state */
-	private SurveyState _state = new CreatedSurveyState();
+	private SurveyState _state = new CreatedSurveyState(this);
 
 	public Survey() {
 		// TODO: init vars

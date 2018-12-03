@@ -1,3 +1,8 @@
+package sth;
+
+import java.io.Serializable;
+
+
 public abstract class SurveyState {
     private Survey _survey;
 

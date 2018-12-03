@@ -1,3 +1,8 @@
+package sth;
+
+import java.io.Serializable;
+
+
 public class ClosedSurveyState extends SurveyState {
     public ClosedSurveyState(Survey survey) {
         super(survey);
