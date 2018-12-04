@@ -5,8 +5,13 @@ public class Answer implements Serializable{
 	private int _hours;
 	private String _comment;
 	
-	public Answer() {
-		// Do nothing
+	public Answer(int hours, String comment) {
+		_hours = hours;
+		_comment = comment;
+	}
+
+	public int getHours() {
+		return _hours;
 	}
 
 }

@@ -15,7 +15,7 @@ public class ClosingSurveyException extends DialogException {
 
   /** Discipline name. */
   private String _discipline;
-
+  
   /** Project name. */
   private String _project;
   
