@@ -1,10 +1,14 @@
 package sth;
 
 import java.io.Serializable;
-
+import sth.exceptions.SurveyClosingException;
+import sth.exceptions.SurveyFinishingException;
+import sth.exceptions.SurveyOpeningException;
+import sth.exceptions.SurveyCancelingException;
+import sth.exceptions.NoSuchSurveyException;
 
 public abstract class SurveyState {
-    private Survey _survey;
+    protected Survey _survey;
 
     public SurveyState(Survey survey) {
         _survey = survey;
@@ -14,8 +18,23 @@ public abstract class SurveyState {
         return _survey;
     }
 
-    public abstract void open();
-    public abstract void close();
-    public abstract void finalise();
-    public abstract void cancel(); 
+    public abstract String getStatus();
+
+    public void submit(int id, Answer answer) throws NoSuchSurveyException {
+        throw new NoSuchSurveyException();
+    }
+
+    public void open() throws SurveyOpeningException {
+        throw new SurveyOpeningException();
+    }
+
+    public void close() throws SurveyClosingException {
+        throw new SurveyClosingException();
+    }
+
+    public void finalise() throws SurveyFinishingException {
+        throw new SurveyFinishingException();
+    }
+
+    public abstract void cancel() throws SurveyCancelingException;
 }

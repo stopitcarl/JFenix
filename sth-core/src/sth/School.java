@@ -19,6 +19,11 @@ import sth.exceptions.IllegalDisciplineException;
 import sth.exceptions.IllegalProjectNameException;
 import sth.exceptions.NoSuchProjectNameException;
 import sth.exceptions.TooManySurveysException;
+import sth.exceptions.SurveyCancelingException;
+import sth.exceptions.NoSuchSurveyException;
+import sth.exceptions.SurveyOpeningException;
+import sth.exceptions.SurveyClosingException;
+import sth.exceptions.SurveyFinishingException;
 
 // TODO: search people and retrieve peopel by id, not by object
 
@@ -108,14 +113,13 @@ public class School implements Serializable {
 	 * @param user
 	 * @return a Student if user is a student
 	 */
-	public Student getStudent(Person user){
+	public Student getStudent(int id){
 		// Search student
 		Student s;
-		for(Course c : _courses){
-			s = c.getStudent(user.getId());
-			if(s != null && user.equals(s))
+		for(Course c : _courses)			
+			if((s = c.getStudent(id)) != null)
 				return s;
-		}
+		
 		return null;
 	}
 
@@ -123,10 +127,10 @@ public class School implements Serializable {
  	* @param user
  	* @return true if user is a representative, otherwise false
  	*/
-	public boolean isRepresentative(Person user){
+	public boolean isRepresentative(int id){
 		// Search student
 		for(Course c : _courses)			
-				if (c.isRepresentative(user.getId()))
+				if (c.isRepresentative(id))
 					return true;
 		return false;
 	}
@@ -188,7 +192,7 @@ public class School implements Serializable {
 				
 		if (getAdministrative(p) != null) // If its administrative
 			return p.accept(ps);
-		if(getStudent(p) != null)
+		if(getStudent(p.getId()) != null)
 			return p.accept(ps);
 		else 
 			return p.accept(ps);
@@ -245,6 +249,25 @@ public class School implements Serializable {
 		subject.addProject(projectName);
 	}
 
+	public void submitProject(Person user, String subjectName, String projectName, String answer) throws IllegalDisciplineException, NoSuchProjectNameException {
+		Student student = getStudent(user.getId());
+		
+		if(student == null)
+			return;
+		
+		// Check if subject exists
+		Subject subject = student.getSubject(subjectName);
+		if(subject == null)
+			throw new IllegalDisciplineException(subjectName);
+		
+			// Check if open project exists
+		Project project = subject.getProject(projectName);
+		if(project == null || !project.isOpen())
+			throw new NoSuchProjectNameException(projectName, subjectName);
+		
+		project.submitAnswer(student.getId(), answer);
+	}
+
 	/**
  	* Closes project in subject if one with the given name exists
  	* @param user
@@ -264,9 +287,9 @@ public class School implements Serializable {
 
 	public void createSurvey(Person user, String subjectName, String projectName) 
 							throws IllegalDisciplineException, NoSuchProjectNameException, TooManySurveysException {
-		Student student = getStudent(user);
+		Student student = getStudent(user.getId());
 
-		if (!isRepresentative(user) && student != null)
+		if (!isRepresentative(user.getId()) && student != null)
 			return; // TODO: consider this situation more carefully
 		
 		Course course = student.getCourse();
@@ -284,10 +307,11 @@ public class School implements Serializable {
 	}
 
 	public void cancelSurvey(Person user, String subjectName, String projectName) 
-							throws IllegalDisciplineException, NoSuchProjectNameException {
-		Student student = getStudent(user);
+							throws IllegalDisciplineException, NoSuchProjectNameException,
+							NoSuchSurveyException, SurveyCancelingException {
+		Student student = getStudent(user.getId());
 
-		if (!isRepresentative(user) && student != null)
+		if (!isRepresentative(user.getId()) && student != null)
 			return; // TODO: consider this situation more carefully
 		
 		Course course = student.getCourse();
@@ -295,14 +319,103 @@ public class School implements Serializable {
 		Project project;
 		
 		// Check if subject exists
-		if ( (subject = course.getSubject(subjectName)) != null ){		
+		if ( (subject = course.getSubject(subjectName)) != null ) {		
 			if ( (project = subject.getProject(projectName)) != null) {
-				Survey survey = project.getSurvey();
-				survey.cancel();				
+				project.cancelSurvey();
 			} else
 				throw new NoSuchProjectNameException(projectName, subjectName);
 		} else
 			throw new IllegalDisciplineException(subjectName);
+	}
+
+	public void openSurvey(Person user, String subjectName, String projectName) 
+							throws IllegalDisciplineException, NoSuchProjectNameException,
+							NoSuchSurveyException, SurveyOpeningException {
+		Student student = getStudent(user.getId());
+
+		if (!isRepresentative(user.getId()) && student != null)
+			return; // TODO: consider this situation more carefully
+		
+		Course course = student.getCourse();
+		Subject subject;
+		Project project;
+		
+		// Check if subject exists
+		if ( (subject = course.getSubject(subjectName)) != null ) {		
+			if ( (project = subject.getProject(projectName)) != null) {
+				project.openSurvey();
+			} else
+				throw new NoSuchProjectNameException(projectName, subjectName);
+		} else
+			throw new IllegalDisciplineException(subjectName);
+	}
+
+	public void closeSurvey(Person user, String subjectName, String projectName) 
+							throws IllegalDisciplineException, NoSuchProjectNameException,
+							NoSuchSurveyException, SurveyClosingException {
+		Student student = getStudent(user.getId());
+
+		if (!isRepresentative(user.getId()) && student != null)
+			return; // TODO: consider this situation more carefully
+		
+		Course course = student.getCourse();
+		Subject subject;
+		Project project;
+		
+		// Check if subject exists
+		if ( (subject = course.getSubject(subjectName)) != null ) {		
+			if ( (project = subject.getProject(projectName)) != null) {
+				project.closeSurvey();
+			} else
+				throw new NoSuchProjectNameException(projectName, subjectName);
+		} else
+			throw new IllegalDisciplineException(subjectName);
+	}
+
+	public void finishSurvey(Person user, String subjectName, String projectName) 
+							throws IllegalDisciplineException, NoSuchProjectNameException,
+							NoSuchSurveyException, SurveyFinishingException {
+		Student student = getStudent(user.getId());
+
+		if (!isRepresentative(user.getId()) && student != null)
+			return; // TODO: consider this situation more carefully
+		
+		Course course = student.getCourse();
+		Subject subject;
+		Project project;
+		
+		// Check if subject exists
+		if ( (subject = course.getSubject(subjectName)) != null ) {		
+			if ( (project = subject.getProject(projectName)) != null) {
+				project.finishSurvey();
+			} else
+				throw new NoSuchProjectNameException(projectName, subjectName);
+		} else
+			throw new IllegalDisciplineException(subjectName);
+	}
+
+	public void answerSurvey(int id, String subjectName, String projectName, Answer answer) 
+							throws IllegalDisciplineException, NoSuchProjectNameException,	NoSuchSurveyException	{
+		Student student = getStudent(id);
+
+		if(student == null)
+			return;
+		
+		// Check if subject exists
+		Subject subject = student.getSubject(subjectName);
+		if(subject == null)
+			throw new IllegalDisciplineException(subjectName);
+		
+		// Check if open project exists
+		Project project = subject.getProject(projectName);
+		if(project == null || !project.hasSubmission(id))
+			throw new NoSuchProjectNameException(projectName, subjectName);
+		
+		// Check if survey exists
+		Survey survey = project.getSurvey();
+		if(survey == null)
+			throw new NoSuchProjectNameException(projectName, subjectName);
+		survey.submitAnswer(id, answer);
 	}
 
 	/**
@@ -328,6 +441,35 @@ public class School implements Serializable {
 		}
 		Collections.sort(students, new PeopleIdSorter());
 		return students;
+	}
+
+	public List<String> getDisciplineSurveys(Person user, String subjectName) throws IllegalDisciplineException {
+		List<String> surveys = new LinkedList<String>();
+
+		// Check if user has permission
+		if(!isRepresentative(user.getId()))
+			return surveys;
+		
+		// Fetch student object
+		Student student = getStudent(user.getId());
+		if (student == null)
+			return surveys;
+		
+		Course course = student.getCourse();		
+		Subject subject = course.getSubject(subjectName);
+		
+		if (subject == null)
+			throw new IllegalDisciplineException(subjectName);
+		
+		for(Project proj : subject.getProjects()){
+			String surveyStatus = proj.getSurveyStatus();
+			if(!surveyStatus.isEmpty())
+				surveys.add(subjectName + " - " + proj.getName() + " " + surveyStatus);
+		}
+		
+		Collections.sort(surveys, Collator.getInstance(Locale.getDefault()));
+		
+		return surveys;
 	}
 
 		

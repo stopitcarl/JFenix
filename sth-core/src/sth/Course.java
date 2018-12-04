@@ -9,9 +9,9 @@ import java.util.TreeMap;
 
 public class Course implements Comparable<Course>,  Serializable {
 	/* Maximum number of representatives */
-	private int MAX_REPRESENTATIVE = 7;
+	private final static int MAX_REPRESENTATIVE = 7;
 	/* Maximum number of representatives */
-	private int MAX_STUDENTS = 200;
+	private final static int MAX_STUDENTS = 200;
 	/** List of subjects */
 	private Map<String, Subject> _subjects;
 	/** Map of students and their id */

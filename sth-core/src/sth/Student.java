@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.TreeMap;
+
 import java.util.Map;
 import java.text.Collator;
 import java.util.Collections;
@@ -14,8 +15,11 @@ import java.util.Collections;
  */
 public class Student extends Person implements Serializable {
 	
-	/** List of subjects */
+	/** Maximum number of subjects */	
+	private static final int MAX_SUBJECTS = 6;
+	/** List of subjects */	
 	private Map<String, Subject> _subjects;
+	/** student's course */
 	private Course _course;
 
 	/**
@@ -41,12 +45,16 @@ public class Student extends Person implements Serializable {
 	 * @param subject
 	 */
 	public void addSubject(Subject subject) {
-		if (!_subjects.containsKey(subject.getName()))
+		if (!_subjects.containsKey(subject.getName()) && _subjects.size() <= MAX_SUBJECTS)
 			_subjects.put(subject.getName(), subject);
 	}
 
 	public Course getCourse() {
 		return _course;
+	}
+
+	public Subject getSubject(String subjectName) {
+		return _subjects.get(subjectName);
 	}
 
 	/**

@@ -1,6 +1,7 @@
 package sth;
 
 import java.io.Serializable;
+import sth.exceptions.SurveyFinishingException;
 
 
 public class FinalisedSurveyState extends SurveyState {
@@ -8,19 +9,19 @@ public class FinalisedSurveyState extends SurveyState {
         super(survey);
     }
 
-    public void open() {
-        //Erro. 
-    }
-
-    public void close() {
-        //Erro.
-    }
-
+    @Override
     public void finalise() {
         //Do nothing.
     }
 
-    public void cancel() { // TODO: throw SurveyFinishedException
-        //Erro.
+    public String getStatus(){
+        Survey survey = getSurvey();
+        String status = "- " + survey.getAnswerSize() + " respostas - "; // 20 respostas - 16 horas
+        status += survey.getAvgHours() + " horas";
+        return status;
+    }
+    
+    public void cancel() throws SurveyFinishingException { 
+        throw new SurveyFinishingException();
     }
 }

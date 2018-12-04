@@ -8,19 +8,16 @@ public class CreatedSurveyState extends SurveyState {
         super(survey);
     }
 
+    @Override
     public void open() {
         getSurvey().setState(new OpenSurveyState(getSurvey()));
     }
 
-    public void close() {
-        //Erro?
+    public String getStatus(){
+        return "(por abrir)";
     }
-
-    public void finalise() {
-        //Erro?
-    }
-
+    
     public void cancel() {
-        //Apaga o survey.
+        // do nothing
     }
 }

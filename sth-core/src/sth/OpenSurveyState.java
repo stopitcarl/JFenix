@@ -1,6 +1,7 @@
 package sth;
 
 import java.io.Serializable;
+import sth.exceptions.SurveyNotEmptyException;
 
 
 public class OpenSurveyState extends SurveyState {
@@ -8,19 +9,23 @@ public class OpenSurveyState extends SurveyState {
         super(survey);
     }
 
-    public void open() {
-        //Do nothing. --> acho que é suposto não fazer nada 
+    public String getStatus() {
+        return "(aberto)";
     }
 
+    @Override    
+    public void submit(int id, Answer answer){
+        // Do nothing
+	}
+    
+    @Override
     public void close() {
         getSurvey().setState(new ClosedSurveyState(getSurvey()));
     }
 
-    public void finalise() {
-        //Erro?
-    }
-
-    public void cancel() { // TODO: throw NonEmptySurveyException 
-        //Apaga o survey
+    @Override
+    public void cancel() throws SurveyNotEmptyException { 
+        if (_survey.getResults().isEmpty())
+            throw new SurveyNotEmptyException();
     }
 }

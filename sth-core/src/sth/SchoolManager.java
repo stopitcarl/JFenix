@@ -18,7 +18,11 @@ import sth.exceptions.IllegalProjectNameException;
 import sth.exceptions.NoSuchProjectNameException;
 import sth.exceptions.NoSuchPersonIdException;
 import sth.exceptions.TooManySurveysException;
-
+import sth.exceptions.SurveyCancelingException;
+import sth.exceptions.NoSuchSurveyException;
+import sth.exceptions.SurveyOpeningException;
+import sth.exceptions.SurveyClosingException;
+import sth.exceptions.SurveyFinishingException;
 
 /**
  * The façade class.
@@ -109,14 +113,14 @@ public class SchoolManager {
 	 * @return true when the currently logged in person is a student
 	 */
 	public boolean hasStudent() {
-		return _school.getStudent(_user) != null;
+		return _school.getStudent(_user.getId()) != null;
 	}
 
 	/**
 	 * @return true when the currently logged in person is a representative
 	 */
 	public boolean hasRepresentative() {
-		return _school.isRepresentative(_user) ;
+		return _school.isRepresentative(_user.getId());
 	}
 
 	/**
@@ -157,7 +161,7 @@ public class SchoolManager {
 	}
 
 	/**
- 	* 
+ 	*
  	* @return String with person's details
  	*/		
 	public String showPerson() {
@@ -171,8 +175,10 @@ public class SchoolManager {
  	* @param hours
  	* @param comment
  	*/		
-	public void answerSurvey(String subjectName, String projectName, int hours, String comment) {
-		// do nothing
+	public void answerSurvey(String subjectName, String projectName, int hours, String comment)
+							throws NoSuchProjectNameException, IllegalDisciplineException, NoSuchSurveyException {
+		Answer answer = new Answer(hours, comment);
+		_school.answerSurvey(_user.getId(), subjectName, projectName, answer);
 	}
 
 	/**
@@ -181,8 +187,8 @@ public class SchoolManager {
  	* @param projectName
  	* @param answer
  	*/		
-	public void deliverProject(String subjectName, String projectName, String answer) {
-		// do nothing
+	public void submitProject(String subjectName, String projectName, String answer) throws IllegalDisciplineException, NoSuchProjectNameException {
+		_school.submitProject(_user, subjectName,	projectName, answer);
 	}
 
 	/**
@@ -245,7 +251,7 @@ public class SchoolManager {
 	 * @param projectName
 	 */				
 	public void cancelSurvey(String subjectName, String projectName) 
-							throws IllegalDisciplineException, NoSuchProjectNameException, TooManySurveysException {		
+							throws IllegalDisciplineException, NoSuchProjectNameException,NoSuchSurveyException, SurveyCancelingException {		
 		_school.cancelSurvey(_user, subjectName, projectName);
 	}
 
@@ -254,8 +260,9 @@ public class SchoolManager {
 	 * @param subjectName
 	 * @param projectName
 	 */
-	public void closeSurvey(String subjectName, String projectName) {
-		//	do nothing		
+	public void closeSurvey(String subjectName, String projectName) 
+							throws IllegalDisciplineException, NoSuchProjectNameException, NoSuchSurveyException, SurveyClosingException {
+		_school.closeSurvey(_user, subjectName, projectName);	
 	}
 
 	/**
@@ -267,21 +274,27 @@ public class SchoolManager {
 							throws IllegalDisciplineException, NoSuchProjectNameException, TooManySurveysException {		
 		_school.createSurvey(_user, subjectName, projectName);
 	}
+	
 	/**
 	 * 
 	 * @param subjectName
 	 * @param projectName
 	 */
-	public void finishSurvey(String subjectName, String projectName) {
-		// do nothing		
+	public void finishSurvey(String subjectName, String projectName) 
+							throws IllegalDisciplineException, NoSuchProjectNameException,
+							NoSuchSurveyException, SurveyFinishingException {		
+		_school.finishSurvey(_user, subjectName, projectName);
 	}
+	
 	/**
 	 * 
 	 * @param subjectName
 	 * @param projectName
 	 */
-	public void openSurvey(String subjectName, String projectName) {
-		// do nothing		
+	public void openSurvey(String subjectName, String projectName) 
+							throws IllegalDisciplineException, NoSuchProjectNameException,
+							NoSuchSurveyException, SurveyOpeningException {		
+		_school.openSurvey(_user, subjectName, projectName);				
 	}
 
 	/**
@@ -289,8 +302,13 @@ public class SchoolManager {
 	 * @param subjectName
 	 * @return
 	 */
-	public List<Survey> showDisciplineSurvey(String subjectName) {	
-		return null;
+	public String showDisciplineSurveys(String subjectName) throws IllegalDisciplineException {	
+		String surveys = "";
+		List<String> disciplineSurveys = _school.getDisciplineSurveys(_user, subjectName);
+
+		for (String survey : disciplineSurveys)
+			surveys += survey + "\n";
+		return surveys;
 	}
 
 	/**
