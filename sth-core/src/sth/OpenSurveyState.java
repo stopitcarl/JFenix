@@ -4,7 +4,7 @@ import java.io.Serializable;
 import sth.exceptions.SurveyNotEmptyException;
 
 
-public class OpenSurveyState extends SurveyState {
+public class OpenSurveyState extends SurveyState implements Serializable {
     public OpenSurveyState(Survey survey) {
         super(survey);
     }

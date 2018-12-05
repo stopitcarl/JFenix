@@ -3,7 +3,8 @@ package sth;
 import java.io.Serializable;
 
 
-public class ClosedSurveyState extends SurveyState {
+public class ClosedSurveyState extends SurveyState implements Serializable {
+    
     public ClosedSurveyState(Survey survey) {
         super(survey);
     }
