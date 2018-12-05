@@ -7,7 +7,7 @@ import sth.exceptions.SurveyOpeningException;
 import sth.exceptions.SurveyCancelingException;
 import sth.exceptions.NoSuchSurveyException;
 
-public abstract class SurveyState {
+public abstract class SurveyState implements Serializable {
     protected Survey _survey;
 
     public SurveyState(Survey survey) {

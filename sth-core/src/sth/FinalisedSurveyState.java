@@ -4,7 +4,7 @@ import java.io.Serializable;
 import sth.exceptions.SurveyFinishingException;
 
 
-public class FinalisedSurveyState extends SurveyState {
+public class FinalisedSurveyState extends SurveyState implements Serializable {
     public FinalisedSurveyState(Survey survey) {
         super(survey);
     }

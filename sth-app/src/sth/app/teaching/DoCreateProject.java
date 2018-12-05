@@ -21,27 +21,26 @@ public class DoCreateProject extends Command<SchoolManager> {
 	/** Name of project's discipline */
 	Input<String> _disciplineName;
 
-  	/**
-   	* @param receiver
-   	*/
+	/**
+	 * @param receiver
+	 */
 	public DoCreateProject(SchoolManager receiver) {
-    	super(Label.CREATE_PROJECT, receiver);
-    	_disciplineName = _form.addStringInput(Message.requestDisciplineName());
-    	_projectName = _form.addStringInput(Message.requestProjectName());    
-  	}
+		super(Label.CREATE_PROJECT, receiver);
+		_disciplineName = _form.addStringInput(Message.requestDisciplineName());
+		_projectName = _form.addStringInput(Message.requestProjectName());
+	}
 
-  	/** @see pt.tecnico.po.ui.Command#execute() */
-  	@Override
+	/** @see pt.tecnico.po.ui.Command#execute() */
+	@Override
 	public final void execute() throws DialogException {
-    	_form.parse();
-    	try{
-    	 	_receiver.createProject(_disciplineName.value(), _projectName.value());
-  		} catch(IllegalDisciplineException e){
+		_form.parse();
+		try {
+			_receiver.createProject(_disciplineName.value(), _projectName.value());
+		} catch (IllegalDisciplineException e) {
 			throw new NoSuchDisciplineException(e.getName());
-	  	} catch(IllegalProjectNameException e){    
+		} catch (IllegalProjectNameException e) {
 			throw new DuplicateProjectException(e.getSubjectName(), e.getProjectName());
 		}
 
 	}
 }
-

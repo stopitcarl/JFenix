@@ -6,6 +6,9 @@ import java.io.Serializable;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.Map.Entry;
 import java.text.Collator;
 import java.util.Collections;
 import java.util.Comparator;
@@ -33,12 +36,11 @@ import sth.exceptions.SurveyFinishingException;
 public class School implements Serializable {
 	/** List of courses */
 	private List<Course> _courses;
-	/** List of professors */
-	private List<Professor> _professors;
-	/** List of administratives*/
+	/** Map of professors */
+	private Map<Integer, Professor> _professors;
+	/** List of administratives */
 	private List<Administrative> _administratives;
 
-	
 	/** Serial number for serialization. */
 	private static final long serialVersionUID = 201810051538L;
 
@@ -47,17 +49,18 @@ public class School implements Serializable {
 	 */
 	public School() {
 		this._courses = new LinkedList<Course>();
-		this._professors = new LinkedList<Professor>();
+		this._professors = new TreeMap<Integer, Professor>();
 		this._administratives = new LinkedList<Administrative>();
 	}
 
-	/** 
+	/**
 	 * Creates new school from object file 'filename'
+	 * 
 	 * @param filename
 	 * @throws BadEntryException
 	 * @throws IOException
 	 */
-	public void importFile(String filename) throws IOException, BadEntryException, FileNotFoundException { 
+	public void importFile(String filename) throws IOException, BadEntryException, FileNotFoundException {
 		FileImporter fileIn = new FileImporter();
 		fileIn.importFile(filename);
 	}
@@ -83,13 +86,13 @@ public class School implements Serializable {
 			if (s.getName().equals(name))
 				return s;
 		return null;
-	}	
-	
+	}
+
 	/**
 	 * @param user
 	 * @return an Administrative if user is an administrative
 	 */
-	public Administrative getAdministrative(Person user){
+	public Administrative getAdministrative(Person user) {
 		// Search administratives
 		for (Administrative admin : _administratives)
 			if (admin.equals(user))
@@ -101,37 +104,34 @@ public class School implements Serializable {
 	 * @param user
 	 * @return a Professor if user is a professor
 	 */
-	public Professor getProfessor(Person user){
+	public Professor getProfessor(int id) {
 		// Search professors
-		for (Professor prof : _professors)
-			if (prof.equals(user))
-				return prof;
-		return null;
+		return _professors.get(id);
 	}
 
 	/**
 	 * @param user
 	 * @return a Student if user is a student
 	 */
-	public Student getStudent(int id){
+	public Student getStudent(int id) {
 		// Search student
 		Student s;
-		for(Course c : _courses)			
-			if((s = c.getStudent(id)) != null)
+		for (Course c : _courses)
+			if ((s = c.getStudent(id)) != null)
 				return s;
-		
+
 		return null;
 	}
 
 	/**
- 	* @param user
- 	* @return true if user is a representative, otherwise false
- 	*/
-	public boolean isRepresentative(int id){
+	 * @param user
+	 * @return true if user is a representative, otherwise false
+	 */
+	public boolean isRepresentative(int id) {
 		// Search student
-		for(Course c : _courses)			
-				if (c.isRepresentative(id))
-					return true;
+		for (Course c : _courses)
+			if (c.isRepresentative(id))
+				return true;
 		return false;
 	}
 
@@ -142,19 +142,19 @@ public class School implements Serializable {
 	public List<Person> searchPerson(String name) {
 		LinkedList<Person> matches = new LinkedList<Person>();
 		// Search student
-		for(Course c : _courses)
-			for(Student s : c.getStudents())
+		for (Course c : _courses)
+			for (Student s : c.getStudents())
 				if (s.getName().contains(name))
 					matches.add(s);
 		// Search professors
-		for (Person prof : _professors)
+		for (Person prof : _professors.values())
 			if (prof.getName().contains(name))
 				matches.add(prof);
 		// Search administratives
 		for (Person admin : _administratives)
 			if (admin.getName().contains(name))
 				matches.add(admin);
-		
+
 		Collections.sort(matches, new PeopleNameSorter());
 		return matches;
 	}
@@ -166,139 +166,165 @@ public class School implements Serializable {
 	public Person searchPerson(int id) {
 		Person person;
 		// search professor list
-		for (Professor prof : _professors)
-			if (prof.getId() == id)
-				return prof;
+		Professor prof;
+		if ((prof = _professors.get(id)) != null)
+			return prof;
 		// search administrative list
 		for (Administrative admin : _administratives)
 			if (admin.getId() == id)
-				return admin;			
+				return admin;
 		// search student list
-		for (Course c : _courses)	
+		for (Course c : _courses)
 			if ((person = c.getStudent(id)) != null)
 				return person;
 
-
-		return null;								
+		return null;
 	}
-
 
 	/**
 	 * @param p
 	 * @return String with person's details
 	 */
-	public String showPerson(Person p) { 		
+	public String showPerson(Person p) {
 		PersonShower ps = new PersonShower();
-				
+
 		if (getAdministrative(p) != null) // If its administrative
 			return p.accept(ps);
-		if(getStudent(p.getId()) != null)
+		if (getStudent(p.getId()) != null)
 			return p.accept(ps);
-		else 
+		else
 			return p.accept(ps);
 	}
 
 	/**
 	 * @return List of String with all persons's details
 	 */
-	public List<String> showAllPersons(){		
+	public List<String> showAllPersons() {
 		LinkedList<String> people = new LinkedList<String>();
 		// Index all professors
-		for (Professor prof : _professors)
-			people.add(showPerson(prof));				
-		
+		for (Professor prof : _professors.values())
+			people.add(showPerson(prof));
+
 		// Index all administratives
 		for (Administrative admin : _administratives)
-			people.add(showPerson(admin));				
-		
+			people.add(showPerson(admin));
+
 		// Index all students
-		for (Course c : _courses)	
-			for(Student st : c.getStudents())
+		for (Course c : _courses)
+			for (Student st : c.getStudents())
 				people.add(showPerson(st));
-		
+
 		Collections.sort(people, new PeopleIdSorter());
 		return people;
 	}
-	
+
 	/**
 	 * @param s
 	 * @return course of student
 	 */
-	private Course getStudentCourse(Student s){
+	private Course getStudentCourse(Student s) {
 		for (Course c : _courses)
 			if (c.getStudent(s.getId()) != null)
 				return c;
-		return null;			
+		return null;
 	}
 
-	
 	/**
 	 * Creates project in Subject if none exists with same name
+	 * 
 	 * @param user
 	 * @param subjectName
 	 * @param projectName
 	 * @throws IllegalDisciplineException
 	 * @throws IllegalProjectNameException
 	 */
-	public void createProject(Person user, String subjectName, String projectName) throws IllegalDisciplineException, IllegalProjectNameException {
-		Professor prof = getProfessor(user);
-		Subject subject;	
-		if((subject = prof.getDiscipline(subjectName)) == null)
+	public void createProject(Person user, String subjectName, String projectName)
+			throws IllegalDisciplineException, IllegalProjectNameException {
+		Professor prof = getProfessor(user.getId());
+		Subject subject;
+		if ((subject = prof.getDiscipline(subjectName)) == null)
 			throw new IllegalDisciplineException(subjectName);
-		
+
 		subject.addProject(projectName);
 	}
 
-	public void submitProject(Person user, String subjectName, String projectName, String answer) throws IllegalDisciplineException, NoSuchProjectNameException {
+	public void submitProject(Person user, String subjectName, String projectName, String answer)
+			throws IllegalDisciplineException, NoSuchProjectNameException {
 		Student student = getStudent(user.getId());
-		
-		if(student == null)
+
+		if (student == null)
 			return;
-		
+
 		// Check if subject exists
 		Subject subject = student.getSubject(subjectName);
-		if(subject == null)
+		if (subject == null)
 			throw new IllegalDisciplineException(subjectName);
-		
-			// Check if open project exists
+
+		// Check if open project exists
 		Project project = subject.getProject(projectName);
-		if(project == null || !project.isOpen())
+		if (project == null || !project.isOpen())
 			throw new NoSuchProjectNameException(projectName, subjectName);
-		
+
 		project.submitAnswer(student.getId(), answer);
 	}
 
 	/**
- 	* Closes project in subject if one with the given name exists
- 	* @param user
- 	* @param subjectName
- 	* @param projectName
- 	* @throws IllegalDisciplineException
- 	* @throws NoSuchProjectNameException
- 	*/
-	public void closeProject(Person user, String subjectName, String projectName) throws IllegalDisciplineException, NoSuchProjectNameException {
-		Professor prof = getProfessor(user);
-		Subject subject;	
-		if((subject = prof.getDiscipline(subjectName)) == null)
+	 * Closes project in subject if one with the given name exists
+	 * 
+	 * @param user
+	 * @param subjectName
+	 * @param projectName
+	 * @throws IllegalDisciplineException
+	 * @throws NoSuchProjectNameException
+	 */
+	public void closeProject(Person user, String subjectName, String projectName)
+			throws IllegalDisciplineException, NoSuchProjectNameException {
+		Professor prof = getProfessor(user.getId());
+		Subject subject;
+		if ((subject = prof.getDiscipline(subjectName)) == null)
 			throw new IllegalDisciplineException(subjectName);
-		
+
 		subject.closeProject(projectName);
 	}
 
-	public void createSurvey(Person user, String subjectName, String projectName) 
-							throws IllegalDisciplineException, NoSuchProjectNameException, TooManySurveysException {
+	public List<String> showProjectSubmissions(int userId, String subjectName, String projectName)
+			throws IllegalDisciplineException, NoSuchProjectNameException {
+
+		Professor prof = getProfessor(userId);
+
+		// Check if subject exists
+		Subject subject;
+		if ((subject = prof.getDiscipline(subjectName)) == null)
+			throw new IllegalDisciplineException(subjectName);
+
+		// Check if project exists
+		Project project = subject.getProject(projectName);
+		if (project == null)
+			throw new NoSuchProjectNameException(projectName, subjectName);
+
+		List<String> submissions = new LinkedList<String>();
+
+		Map<Integer, String> submitMap = project.getSubmissions();
+		submitMap.forEach((id, sub) -> submissions.add("* " + id + " - " + sub));
+
+		Collections.sort(submissions, Collator.getInstance(Locale.getDefault()));
+		return submissions;
+	}
+
+	public void createSurvey(Person user, String subjectName, String projectName)
+			throws IllegalDisciplineException, NoSuchProjectNameException, TooManySurveysException {
 		Student student = getStudent(user.getId());
 
 		if (!isRepresentative(user.getId()) && student != null)
 			return; // TODO: consider this situation more carefully
-		
+
 		Course course = student.getCourse();
 		Subject subject;
 		Project project;
-		
+
 		// Check if subject exists
-		if ( (subject = course.getSubject(subjectName)) != null ){		
-			if ( (project = subject.getProject(projectName)) != null)
+		if ((subject = course.getSubject(subjectName)) != null) {
+			if ((project = subject.getProject(projectName)) != null)
 				project.createSurvey();
 			else
 				throw new NoSuchProjectNameException(projectName, subjectName);
@@ -306,21 +332,20 @@ public class School implements Serializable {
 			throw new IllegalDisciplineException(subjectName);
 	}
 
-	public void cancelSurvey(Person user, String subjectName, String projectName) 
-							throws IllegalDisciplineException, NoSuchProjectNameException,
-							NoSuchSurveyException, SurveyCancelingException {
+	public void cancelSurvey(Person user, String subjectName, String projectName) throws IllegalDisciplineException,
+			NoSuchProjectNameException, NoSuchSurveyException, SurveyCancelingException {
 		Student student = getStudent(user.getId());
 
 		if (!isRepresentative(user.getId()) && student != null)
 			return; // TODO: consider this situation more carefully
-		
+
 		Course course = student.getCourse();
 		Subject subject;
 		Project project;
-		
+
 		// Check if subject exists
-		if ( (subject = course.getSubject(subjectName)) != null ) {		
-			if ( (project = subject.getProject(projectName)) != null) {
+		if ((subject = course.getSubject(subjectName)) != null) {
+			if ((project = subject.getProject(projectName)) != null) {
 				project.cancelSurvey();
 			} else
 				throw new NoSuchProjectNameException(projectName, subjectName);
@@ -328,21 +353,20 @@ public class School implements Serializable {
 			throw new IllegalDisciplineException(subjectName);
 	}
 
-	public void openSurvey(Person user, String subjectName, String projectName) 
-							throws IllegalDisciplineException, NoSuchProjectNameException,
-							NoSuchSurveyException, SurveyOpeningException {
+	public void openSurvey(Person user, String subjectName, String projectName) throws IllegalDisciplineException,
+			NoSuchProjectNameException, NoSuchSurveyException, SurveyOpeningException {
 		Student student = getStudent(user.getId());
 
 		if (!isRepresentative(user.getId()) && student != null)
 			return; // TODO: consider this situation more carefully
-		
+
 		Course course = student.getCourse();
 		Subject subject;
 		Project project;
-		
+
 		// Check if subject exists
-		if ( (subject = course.getSubject(subjectName)) != null ) {		
-			if ( (project = subject.getProject(projectName)) != null) {
+		if ((subject = course.getSubject(subjectName)) != null) {
+			if ((project = subject.getProject(projectName)) != null) {
 				project.openSurvey();
 			} else
 				throw new NoSuchProjectNameException(projectName, subjectName);
@@ -350,21 +374,20 @@ public class School implements Serializable {
 			throw new IllegalDisciplineException(subjectName);
 	}
 
-	public void closeSurvey(Person user, String subjectName, String projectName) 
-							throws IllegalDisciplineException, NoSuchProjectNameException,
-							NoSuchSurveyException, SurveyClosingException {
+	public void closeSurvey(Person user, String subjectName, String projectName) throws IllegalDisciplineException,
+			NoSuchProjectNameException, NoSuchSurveyException, SurveyClosingException {
 		Student student = getStudent(user.getId());
 
 		if (!isRepresentative(user.getId()) && student != null)
 			return; // TODO: consider this situation more carefully
-		
+
 		Course course = student.getCourse();
 		Subject subject;
 		Project project;
-		
+
 		// Check if subject exists
-		if ( (subject = course.getSubject(subjectName)) != null ) {		
-			if ( (project = subject.getProject(projectName)) != null) {
+		if ((subject = course.getSubject(subjectName)) != null) {
+			if ((project = subject.getProject(projectName)) != null) {
 				project.closeSurvey();
 			} else
 				throw new NoSuchProjectNameException(projectName, subjectName);
@@ -372,21 +395,20 @@ public class School implements Serializable {
 			throw new IllegalDisciplineException(subjectName);
 	}
 
-	public void finishSurvey(Person user, String subjectName, String projectName) 
-							throws IllegalDisciplineException, NoSuchProjectNameException,
-							NoSuchSurveyException, SurveyFinishingException {
+	public void finishSurvey(Person user, String subjectName, String projectName) throws IllegalDisciplineException,
+			NoSuchProjectNameException, NoSuchSurveyException, SurveyFinishingException {
 		Student student = getStudent(user.getId());
 
 		if (!isRepresentative(user.getId()) && student != null)
 			return; // TODO: consider this situation more carefully
-		
+
 		Course course = student.getCourse();
 		Subject subject;
 		Project project;
-		
+
 		// Check if subject exists
-		if ( (subject = course.getSubject(subjectName)) != null ) {		
-			if ( (project = subject.getProject(projectName)) != null) {
+		if ((subject = course.getSubject(subjectName)) != null) {
+			if ((project = subject.getProject(projectName)) != null) {
 				project.finishSurvey();
 			} else
 				throw new NoSuchProjectNameException(projectName, subjectName);
@@ -394,27 +416,27 @@ public class School implements Serializable {
 			throw new IllegalDisciplineException(subjectName);
 	}
 
-	public void answerSurvey(int id, String subjectName, String projectName, Answer answer) 
-							throws IllegalDisciplineException, NoSuchProjectNameException,	NoSuchSurveyException	{
+	public void answerSurvey(int id, String subjectName, String projectName, Answer answer)
+			throws IllegalDisciplineException, NoSuchProjectNameException, NoSuchSurveyException {
 		Student student = getStudent(id);
 
-		if(student == null)
+		if (student == null)
 			return;
-		
+
 		// Check if subject exists
 		Subject subject = student.getSubject(subjectName);
-		if(subject == null)
+		if (subject == null)
 			throw new IllegalDisciplineException(subjectName);
-		
+
 		// Check if open project exists
 		Project project = subject.getProject(projectName);
-		if(project == null || !project.hasSubmission(id))
+		if (project == null || !project.hasSubmission(id))
 			throw new NoSuchProjectNameException(projectName, subjectName);
-		
+
 		// Check if survey exists
 		Survey survey = project.getSurvey();
-		if(survey == null)
-			throw new NoSuchProjectNameException(projectName, subjectName);
+		if (survey == null)
+			throw new NoSuchSurveyException();
 		survey.submitAnswer(id, answer);
 	}
 
@@ -425,19 +447,19 @@ public class School implements Serializable {
 	 * @return List of strings with students info that are inrolled in subject
 	 * @throws IllegalDisciplineException
 	 */
-	public List<String> showDisciplineStudents(Person user, String subjectName) throws IllegalDisciplineException{
-		Subject subject;			
+	public List<String> showDisciplineStudents(Person user, String subjectName) throws IllegalDisciplineException {
+		Subject subject;
 		LinkedList<String> students = new LinkedList<String>();
-		Professor prof = getProfessor(user);
-		
-		if((subject = prof.getDiscipline(subjectName)) == null)
+		Professor prof = getProfessor(user.getId());
+
+		if ((subject = prof.getDiscipline(subjectName)) == null)
 			throw new IllegalDisciplineException(subjectName);
-		
-		for(Course c : prof.getCourses()){
-			for(Student s : c.getStudents())
-				if(s.isEnrolledIn(subject))	
+
+		for (Course c : prof.getCourses()) {
+			for (Student s : c.getStudents())
+				if (s.isEnrolledIn(subject))
 					students.add(showPerson(s));
-			break;			
+			break;
 		}
 		Collections.sort(students, new PeopleIdSorter());
 		return students;
@@ -447,39 +469,38 @@ public class School implements Serializable {
 		List<String> surveys = new LinkedList<String>();
 
 		// Check if user has permission
-		if(!isRepresentative(user.getId()))
+		if (!isRepresentative(user.getId()))
 			return surveys;
-		
+
 		// Fetch student object
 		Student student = getStudent(user.getId());
 		if (student == null)
 			return surveys;
-		
-		Course course = student.getCourse();		
+
+		Course course = student.getCourse();
 		Subject subject = course.getSubject(subjectName);
-		
+
 		if (subject == null)
 			throw new IllegalDisciplineException(subjectName);
-		
-		for(Project proj : subject.getProjects()){
+
+		for (Project proj : subject.getProjects()) {
 			String surveyStatus = proj.getSurveyStatus();
-			if(!surveyStatus.isEmpty())
+			if (!surveyStatus.isEmpty())
 				surveys.add(subjectName + " - " + proj.getName() + " " + surveyStatus);
 		}
-		
+
 		Collections.sort(surveys, Collator.getInstance(Locale.getDefault()));
-		
+
 		return surveys;
 	}
 
-		
 	class PeopleIdSorter implements Comparator<String> {
-		
-		public int compare(String s1, String s2){
+
+		public int compare(String s1, String s2) {
 			String[] fields1 = s1.split("\\|");
-			String[] fields2 = s2.split("\\|");			
-			
-			if(fields1.length == fields2.length && fields2.length > 1)
+			String[] fields2 = s2.split("\\|");
+
+			if (fields1.length == fields2.length && fields2.length > 1)
 				return fields1[1].compareTo(fields2[1]);
 			else
 				return 0;
@@ -488,43 +509,45 @@ public class School implements Serializable {
 	}
 
 	class PeopleNameSorter implements Comparator<Person> {
-		
-		public int compare(Person p1, Person p2){
-			final Collator instance = Collator.getInstance();			
-			
+
+		public int compare(Person p1, Person p2) {
+			final Collator instance = Collator.getInstance();
+
 			// Make collator ignore the accentuation
-    		instance.setStrength(Collator.NO_DECOMPOSITION);
-    		
-    		return instance.compare(p1.getName(), p2.getName());
+			instance.setStrength(Collator.NO_DECOMPOSITION);
+
+			return instance.compare(p1.getName(), p2.getName());
 		}
 
 	}
 
-	/**  Builds objects from text file */
-	class FileImporter{
+	/** Builds objects from text file */
+	class FileImporter {
 		transient private Student _tempStudent;
 		transient private Professor _tempProf;
 		transient private boolean _isRep;
 
 		/**
-		* Reads a file and creates appropriate objects
-	 	* @param filename
-	 	* @throws BadEntryException
-	 	* @throws IOException
-	 	*/
-		public void importFile(String filename) throws IOException, BadEntryException, FileNotFoundException { 
+		 * Reads a file and creates appropriate objects
+		 * 
+		 * @param filename
+		 * @throws BadEntryException
+		 * @throws IOException
+		 */
+		public void importFile(String filename) throws IOException, BadEntryException, FileNotFoundException {
 			// exceptions
 			BufferedReader reader = new BufferedReader(new FileReader(filename));
 			String line;
 			while ((line = reader.readLine()) != null) {
-					String[] fields = line.split("\\|");
-					registerFromFields(fields);
-			}			
+				String[] fields = line.split("\\|");
+				registerFromFields(fields);
+			}
 			reader.close();
 		}
 
 		/**
 		 * Pattern matches 'fields' and calls respective factory functions
+		 * 
 		 * @param fields
 		 * @throws BadEntryException
 		 */
@@ -544,22 +567,23 @@ public class School implements Serializable {
 
 		/**
 		 * Builds a person object from 'fields'
+		 * 
 		 * @param fields
 		 * @throws BadEntryException
 		 */
-		private void registerPerson(String[] fields) throws BadEntryException { 
+		private void registerPerson(String[] fields) throws BadEntryException {
 			_tempProf = null;
 			_tempStudent = null;
 
-			if(fields == null || fields.length != 4)
+			if (fields == null || fields.length != 4)
 				throw new BadEntryException("registerPerson");
 
 			// Read fields
 			int id = Integer.parseInt(fields[1]);
 			String phoneNum = fields[2];
 			String name = fields[3];
-			
-			if(searchPerson(id) != null)
+
+			if (searchPerson(id) != null)
 				throw new BadEntryException(fields[0]);
 
 			// Create objects
@@ -570,7 +594,7 @@ public class School implements Serializable {
 				_tempStudent = new Student(id, name, phoneNum);
 			} else if (fields[0].equals("DOCENTE")) {
 				_tempProf = new Professor(id, name, phoneNum);
-				_professors.add(_tempProf);
+				_professors.put(_tempProf.getId(), _tempProf);
 			} else if (fields[0].equals("FUNCIONÁRIO")) {
 				_administratives.add(new Administrative(id, name, phoneNum));
 			} else {
@@ -580,14 +604,15 @@ public class School implements Serializable {
 
 		/**
 		 * Builds Subject and Course objects from 'fields'
+		 * 
 		 * @param fields
 		 * @throws BadEntryException
 		 */
-		private void registerSubject(String[] fields) throws BadEntryException { 
-			
-			if(fields == null)
+		private void registerSubject(String[] fields) throws BadEntryException {
+
+			if (fields == null)
 				throw new BadEntryException("registerSubject");
-			
+
 			fields[0] = fields[0].replaceAll("# ", "");
 
 			Course course;
@@ -600,11 +625,11 @@ public class School implements Serializable {
 			}
 
 			// Create subject if none exists in that course
-			if ((subject = searchSubject(course, fields[1])) == null){
+			if ((subject = searchSubject(course, fields[1])) == null) {
 				subject = new Subject(fields[1]);
-				course.addSubject(subject);				
+				course.addSubject(subject);
 			}
-			
+
 			if (_isRep) {
 				course.addRepresentative(_tempStudent);
 				_isRep = false;
@@ -613,7 +638,7 @@ public class School implements Serializable {
 			if (_tempStudent != null) {
 				course.addStudent(_tempStudent);
 				_tempStudent.addSubject(subject);
-				_tempStudent.setCourse(course);			
+				_tempStudent.setCourse(course);
 			} else if (_tempProf != null) {
 				_tempProf.addSubject(course, subject);
 			}
