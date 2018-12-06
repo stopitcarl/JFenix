@@ -93,10 +93,10 @@ public class School implements Serializable {
 	 * @param user
 	 * @return an Administrative if user is an administrative
 	 */
-	public Administrative getAdministrative(Person user) {
+	public Administrative getAdministrative(int id) {
 		// Search administratives
 		for (Administrative admin : _administratives)
-			if (admin.equals(user))
+			if (admin.getId() == id)
 				return admin;
 		return null;
 	}
@@ -189,7 +189,7 @@ public class School implements Serializable {
 	public String showPerson(Person p) {
 		PersonShower ps = new PersonShower();
 
-		if (getAdministrative(p) != null) // If its administrative
+		if (getAdministrative(p.getId()) != null) // If its administrative
 			return p.accept(ps);
 		if (getStudent(p.getId()) != null)
 			return p.accept(ps);
@@ -239,9 +239,9 @@ public class School implements Serializable {
 	 * @throws IllegalDisciplineException
 	 * @throws IllegalProjectNameException
 	 */
-	public void createProject(Person user, String subjectName, String projectName)
+	public void createProject(int id, String subjectName, String projectName)
 			throws IllegalDisciplineException, IllegalProjectNameException {
-		Professor prof = getProfessor(user.getId());
+		Professor prof = getProfessor(id);
 		Subject subject;
 		if ((subject = prof.getDiscipline(subjectName)) == null)
 			throw new IllegalDisciplineException(subjectName);
@@ -249,9 +249,9 @@ public class School implements Serializable {
 		subject.addProject(projectName);
 	}
 
-	public void submitProject(Person user, String subjectName, String projectName, String answer)
+	public void submitProject(int id, String subjectName, String projectName, String answer)
 			throws IllegalDisciplineException, NoSuchProjectNameException {
-		Student student = getStudent(user.getId());
+		Student student = getStudent(id);
 
 		if (student == null)
 			return;
@@ -278,9 +278,9 @@ public class School implements Serializable {
 	 * @throws IllegalDisciplineException
 	 * @throws NoSuchProjectNameException
 	 */
-	public void closeProject(Person user, String subjectName, String projectName)
+	public void closeProject(int id, String subjectName, String projectName)
 			throws IllegalDisciplineException, NoSuchProjectNameException, SurveyOpeningException {
-		Professor prof = getProfessor(user.getId());
+		Professor prof = getProfessor(id);
 		Subject subject;
 		if ((subject = prof.getDiscipline(subjectName)) == null)
 			throw new IllegalDisciplineException(subjectName);
@@ -312,12 +312,13 @@ public class School implements Serializable {
 		return submissions;
 	}
 
-	public void createSurvey(Person user, String subjectName, String projectName)
+	public void createSurvey(int id, String subjectName, String projectName)
 			throws IllegalDisciplineException, NoSuchProjectNameException, TooManySurveysException {
-		Student student = getStudent(user.getId());
+		Student student = getStudent(id);
+		
 
-		if (!isRepresentative(user.getId()) && student != null)
-			return; // TODO: consider this situation more carefully
+		if (!isRepresentative(id) && student != null)
+			return; 
 
 		Course course = student.getCourse();
 		Subject subject;
@@ -333,11 +334,11 @@ public class School implements Serializable {
 			throw new IllegalDisciplineException(subjectName);
 	}
 
-	public void cancelSurvey(Person user, String subjectName, String projectName) throws IllegalDisciplineException,
+	public void cancelSurvey(int id, String subjectName, String projectName) throws IllegalDisciplineException,
 			NoSuchProjectNameException, NoSuchSurveyException, SurveyCancelingException {
-		Student student = getStudent(user.getId());
+		Student student = getStudent(id);
 
-		if (!isRepresentative(user.getId()) && student != null)
+		if (!isRepresentative(id) && student != null)
 			return; // TODO: consider this situation more carefully
 
 		Course course = student.getCourse();
@@ -354,11 +355,11 @@ public class School implements Serializable {
 			throw new IllegalDisciplineException(subjectName);
 	}
 
-	public void openSurvey(Person user, String subjectName, String projectName) throws IllegalDisciplineException,
+	public void openSurvey(int id, String subjectName, String projectName) throws IllegalDisciplineException,
 			NoSuchProjectNameException, NoSuchSurveyException, SurveyOpeningException {
-		Student student = getStudent(user.getId());
+		Student student = getStudent(id);
 
-		if (!isRepresentative(user.getId()) && student != null)
+		if (!isRepresentative(id) && student != null)
 			return; // TODO: consider this situation more carefully
 
 		Course course = student.getCourse();
@@ -375,11 +376,11 @@ public class School implements Serializable {
 			throw new IllegalDisciplineException(subjectName);
 	}
 
-	public void closeSurvey(Person user, String subjectName, String projectName) throws IllegalDisciplineException,
+	public void closeSurvey(int id, String subjectName, String projectName) throws IllegalDisciplineException,
 			NoSuchProjectNameException, NoSuchSurveyException, SurveyClosingException {
-		Student student = getStudent(user.getId());
+		Student student = getStudent(id);
 
-		if (!isRepresentative(user.getId()) && student != null)
+		if (!isRepresentative(id) && student != null)
 			return; // TODO: consider this situation more carefully
 
 		Course course = student.getCourse();
@@ -396,11 +397,11 @@ public class School implements Serializable {
 			throw new IllegalDisciplineException(subjectName);
 	}
 
-	public void finishSurvey(Person user, String subjectName, String projectName) throws IllegalDisciplineException,
+	public void finishSurvey(int id, String subjectName, String projectName) throws IllegalDisciplineException,
 			NoSuchProjectNameException, NoSuchSurveyException, SurveyFinishingException {
-		Student student = getStudent(user.getId());
+		Student student = getStudent(id);
 
-		if (!isRepresentative(user.getId()) && student != null)
+		if (!isRepresentative(id) && student != null)
 			return; // TODO: consider this situation more carefully
 
 		Course course = student.getCourse();

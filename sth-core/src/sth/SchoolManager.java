@@ -108,7 +108,7 @@ public class SchoolManager {
 	 * @return true when the currently logged in person is an administrative
 	 */
 	public boolean hasAdministrative() {
-		return _school.getAdministrative(_user) != null;
+		return _school.getAdministrative(_user.getId()) != null;
 	}
 
 	/**
@@ -198,7 +198,7 @@ public class SchoolManager {
 	 */
 	public void submitProject(String subjectName, String projectName, String answer)
 			throws IllegalDisciplineException, NoSuchProjectNameException {
-		_school.submitProject(_user, subjectName, projectName, answer);
+		_school.submitProject(_user.getId(), subjectName, projectName, answer);
 	}
 
 	/**
@@ -222,7 +222,7 @@ public class SchoolManager {
 	 */
 	public void closeProject(String subjectName, String projectName)
 			throws IllegalDisciplineException, NoSuchProjectNameException, SurveyOpeningException {
-		_school.closeProject(_user, subjectName, projectName);
+		_school.closeProject(_user.getId(), subjectName, projectName);
 	}
 
 	/**
@@ -235,7 +235,7 @@ public class SchoolManager {
 	 */
 	public void createProject(String subjectName, String projectName)
 			throws IllegalDisciplineException, IllegalProjectNameException {
-		_school.createProject(_user, subjectName, projectName);
+		_school.createProject(_user.getId(), subjectName, projectName);
 	}
 
 	/**
@@ -275,7 +275,7 @@ public class SchoolManager {
 	 */
 	public void cancelSurvey(String subjectName, String projectName) throws IllegalDisciplineException,
 			NoSuchProjectNameException, NoSuchSurveyException, SurveyCancelingException {
-		_school.cancelSurvey(_user, subjectName, projectName);
+		_school.cancelSurvey(_user.getId(), subjectName, projectName);
 	}
 
 	/**
@@ -285,7 +285,7 @@ public class SchoolManager {
 	 */
 	public void closeSurvey(String subjectName, String projectName) throws IllegalDisciplineException,
 			NoSuchProjectNameException, NoSuchSurveyException, SurveyClosingException {
-		_school.closeSurvey(_user, subjectName, projectName);
+		_school.closeSurvey(_user.getId(), subjectName, projectName);
 	}
 
 	/**
@@ -295,7 +295,7 @@ public class SchoolManager {
 	 */
 	public void createSurvey(String subjectName, String projectName)
 			throws IllegalDisciplineException, NoSuchProjectNameException, TooManySurveysException {
-		_school.createSurvey(_user, subjectName, projectName);
+		_school.createSurvey(_user.getId(), subjectName, projectName);
 	}
 
 	/**
@@ -305,7 +305,7 @@ public class SchoolManager {
 	 */
 	public void finishSurvey(String subjectName, String projectName) throws IllegalDisciplineException,
 			NoSuchProjectNameException, NoSuchSurveyException, SurveyFinishingException {
-		_school.finishSurvey(_user, subjectName, projectName);
+		_school.finishSurvey(_user.getId(), subjectName, projectName);
 	}
 
 	/**
@@ -315,7 +315,7 @@ public class SchoolManager {
 	 */
 	public void openSurvey(String subjectName, String projectName) throws IllegalDisciplineException,
 			NoSuchProjectNameException, NoSuchSurveyException, SurveyOpeningException {
-		_school.openSurvey(_user, subjectName, projectName);
+		_school.openSurvey(_user.getId(), subjectName, projectName);
 	}
 
 	/**
