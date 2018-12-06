@@ -6,6 +6,8 @@ import sth.exceptions.SurveyNotEmptyException;
 public class OpenSurveyState extends SurveyState implements Serializable {
     public OpenSurveyState(Survey survey) {
         super(survey);
+        survey.notifyObservers("Pode preencher inquérito do projecto " +  survey.getProjectName() 
+         + " da disciplina " + survey.getSubjectName());
     }
 
     public String getStatus(SurveyShower shower) {

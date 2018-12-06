@@ -35,8 +35,10 @@ public class Professor extends Person implements Serializable {
 	 * @param subject
 	 */
 	public void addSubject(Course course, Subject subject) {
-		if (!_taughtSubjects.containsKey(course))
+		if (!_taughtSubjects.containsKey(course)) {
 			_taughtSubjects.put(course, new TreeMap<String, Subject>());
+			subject.registerObserver(this);
+		}
 
 		TreeMap<String, Subject> taughtCourse = _taughtSubjects.get(course);
 		taughtCourse.put(subject.getName(), subject);

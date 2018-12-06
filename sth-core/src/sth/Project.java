@@ -52,9 +52,9 @@ public class Project implements Serializable {
 	}
 
 	/** Closes project */
-	public void closeProject() throws SurveyOpeningException{ 
+	public void closeProject() throws SurveyOpeningException {
 		_isOpen = false;
-		if(_survey != null)
+		if (_survey != null)
 			_survey.open();
 	}
 
@@ -76,16 +76,16 @@ public class Project implements Serializable {
 		return _submissions.size();
 	}
 
-	public void createSurvey() throws TooManySurveysException {
+	public void createSurvey(Subject s) throws TooManySurveysException {
 		if (_survey != null)
 			throw new TooManySurveysException();
 		else
-			_survey = new Survey();
+			_survey = new Survey(s, _name);
 	}
 
 	public void cancelSurvey() throws NoSuchSurveyException, SurveyCancelingException {
 		if (_survey != null) {
-			if(_survey.cancel())
+			if (_survey.cancel())
 				_survey = null;
 		} else
 			throw new NoSuchSurveyException();
