@@ -2,11 +2,13 @@ package sth;
 
 import java.io.Serializable;
 import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Representation of Person.
  */
-public abstract class Person implements Serializable {
+public abstract class Person implements Serializable, Observer, Comparable<Person> {
 	/** Person's name */
 	private String _name;
 	/* Person's phone number */
@@ -14,7 +16,7 @@ public abstract class Person implements Serializable {
 	/* Person identifier */
 	private int _id;
 	/* Person's list of notifications */
-	private LinkedList<Notification> _notifications;
+	private LinkedList<String> _notifications;
 
 	/**
 	 * @param id          Person identifier
@@ -25,11 +27,17 @@ public abstract class Person implements Serializable {
 		_id = id;
 		_name = name;
 		_phoneNum = phoneNum;
-		_notifications = new LinkedList<Notification>();
+		_notifications = new LinkedList<String>();
 	}
 
-	void addNotifications(Notification n) {
-		// Do nothing
+	public void update(String arg) {
+		_notifications.add(arg);
+	}
+
+	public List<String> getNotifications() {
+		ArrayList<String> notifications = new ArrayList<String>(_notifications);
+		_notifications.clear();
+		return notifications;
 	}
 
 	/**
@@ -67,6 +75,10 @@ public abstract class Person implements Serializable {
 	 * @return Person's identifier
 	 */
 	public abstract String accept(PersonVisitor v);
+
+	public int compareTo(Person p) {
+		return _id - p.getId();
+	}
 
 	@Override
 	public boolean equals(Object o) {

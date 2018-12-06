@@ -97,6 +97,13 @@ public class SchoolManager {
 			throw new NoSuchPersonIdException(id);
 	}
 
+	public String getUserNotifications() {
+		String info = "";
+		for (String notification : _user.getNotifications())
+			info += notification + "\n";
+		return info;
+	}
+
 	/**
 	 * @return true when the currently logged in person is an administrative
 	 */
@@ -200,7 +207,8 @@ public class SchoolManager {
 	 * @param projectName
 	 * @return
 	 */
-	public String showSurveyResults(String subjectName, String projectName) throws IllegalDisciplineException, NoSuchProjectNameException, NoSuchSurveyException {
+	public String showSurveyResults(String subjectName, String projectName)
+			throws IllegalDisciplineException, NoSuchProjectNameException, NoSuchSurveyException {
 		return _school.showSurveyResults(_user.getId(), subjectName, projectName);
 	}
 

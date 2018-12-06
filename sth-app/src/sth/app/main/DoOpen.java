@@ -9,7 +9,6 @@ import sth.exceptions.NoSuchPersonIdException;
 import sth.app.exceptions.NoSuchPersonException;
 import sth.SchoolManager;
 
-
 /**
  * 4.1.1. Open existing document.
  */
@@ -23,7 +22,7 @@ public class DoOpen extends Command<SchoolManager> {
 	 */
 	public DoOpen(SchoolManager receiver) {
 		super(Label.OPEN, receiver);
-		_fileName = _form.addStringInput(Message.openFile());		
+		_fileName = _form.addStringInput(Message.openFile());
 	}
 
 	/** @see pt.tecnico.po.ui.Command#execute() */
@@ -31,12 +30,13 @@ public class DoOpen extends Command<SchoolManager> {
 	public final void execute() throws DialogException {
 		_form.parse();
 		try {
-			 _receiver.importSchoolFile(_fileName.value());
+			_receiver.importSchoolFile(_fileName.value());
+			_display.popup(_receiver.getUserNotifications());
 		} catch (FileNotFoundException fnfe) {
 			_display.popup(Message.fileNotFound());
 		} catch (NoSuchPersonIdException e) {
 			throw new NoSuchPersonException(e.getId());
-		}catch (ClassNotFoundException|IOException ex){
+		} catch (ClassNotFoundException | IOException ex) {
 			ex.printStackTrace();
 		}
 	}

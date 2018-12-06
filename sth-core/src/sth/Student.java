@@ -47,8 +47,11 @@ public class Student extends Person implements Serializable {
 	 * @param subject
 	 */
 	public void addSubject(Subject subject) {
-		if (!_subjects.containsKey(subject.getName()) && _subjects.size() <= MAX_SUBJECTS)
+		if (!_subjects.containsKey(subject.getName()) && _subjects.size() <= MAX_SUBJECTS) {
 			_subjects.put(subject.getName(), subject);
+			subject.registerObserver(this);
+		}
+
 	}
 
 	public Course getCourse() {
@@ -78,7 +81,6 @@ public class Student extends Person implements Serializable {
 	public boolean isEnrolledIn(Subject subject) {
 		return _subjects.containsKey(subject.getName());
 	}
-	
 
 	/**
 	 * @return Person's string
@@ -94,5 +96,5 @@ public class Student extends Person implements Serializable {
 		else
 			return "ALUNO|" + super.toString();
 	}
-	
+
 }

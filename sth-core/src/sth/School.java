@@ -326,7 +326,7 @@ public class School implements Serializable {
 		// Check if subject exists
 		if ((subject = course.getSubject(subjectName)) != null) {
 			if ((project = subject.getProject(projectName)) != null && project.isOpen()) {
-				project.createSurvey();
+				project.createSurvey(subject);
 			} else
 				throw new NoSuchProjectNameException(projectName, subjectName);
 		} else

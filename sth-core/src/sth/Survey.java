@@ -25,15 +25,44 @@ public class Survey implements Serializable {
 	private TreeSet<Integer> _studentIds;
 	/** Survey's state */
 	private SurveyState _state;
+	/** Observer to notofy changes */
+	private Observer _observer;
+	/** Name of project */
+	String _projectName;
+	/** Name of subject */
+	String _subjectName;
 
-	public Survey() {
+	public Survey(Subject s, String projectName) {
 		_answers = new ArrayList<Answer>();
 		_studentIds = new TreeSet<Integer>();
 		_state = new CreatedSurveyState(this);
+		_projectName = projectName;
+		_subjectName = s.getName();
+		registerObserver(s);
 	}
 
 	public String getStatus(SurveyShower shower) {
 		return _state.getStatus(shower);
+	}
+
+	public String getProjectName() {
+		return _projectName;
+	}
+
+	public String getSubjectName() {
+		return _subjectName;
+	}
+
+	public void registerObserver(Observer o) {
+		_observer = o;
+	}
+
+	public void removeObserver(Observer o) {
+		_observer = null;
+	}
+
+	public void notifyObservers(String notification) {
+		_observer.update(notification);
 	}
 
 	public int getMinHours() {

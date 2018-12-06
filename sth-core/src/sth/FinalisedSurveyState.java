@@ -3,22 +3,23 @@ package sth;
 import java.io.Serializable;
 import sth.exceptions.SurveyFinishingException;
 
-
 public class FinalisedSurveyState extends SurveyState implements Serializable {
     public FinalisedSurveyState(Survey survey) {
         super(survey);
+        survey.notifyObservers("Resultados do inquérito do projecto " + survey.getProjectName()  
+        + " disciplina " + survey.getSubjectName() );
     }
 
     @Override
     public void finalise() {
-        //Do nothing.
+        // Do nothing.
     }
 
-    public String getStatus(SurveyShower shower){        
+    public String getStatus(SurveyShower shower) {
         return shower.showFinalised(this);
     }
-    
-    public boolean cancel() throws SurveyFinishingException { 
+
+    public boolean cancel() throws SurveyFinishingException {
         throw new SurveyFinishingException();
     }
 }

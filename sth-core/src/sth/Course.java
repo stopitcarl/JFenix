@@ -6,8 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-
-public class Course implements Comparable<Course>,  Serializable {
+public class Course implements Comparable<Course>, Serializable {
 	/* Maximum number of representatives */
 	private final static int MAX_REPRESENTATIVE = 7;
 	/* Maximum number of representatives */
@@ -15,14 +14,14 @@ public class Course implements Comparable<Course>,  Serializable {
 	/** List of subjects */
 	private Map<String, Subject> _subjects;
 	/** Map of students and their id */
-	private Map<Integer ,Student> _students;
+	private Map<Integer, Student> _students;
 	/** Course's name */
 	private String _name;
 	/** List of representatives */
 	private TreeMap<Integer, Student> _representatives;
 
 	/**
-	 * @param name Course's name 
+	 * @param name Course's name
 	 */
 	public Course(String name) {
 		_name = name;
@@ -32,8 +31,8 @@ public class Course implements Comparable<Course>,  Serializable {
 	}
 
 	/**
- 	* @return course name
- 	*/
+	 * @return course name
+	 */
 	public String getName() {
 		return _name;
 	}
@@ -57,63 +56,73 @@ public class Course implements Comparable<Course>,  Serializable {
 	 */
 	public List<Student> getStudents() {
 		return new ArrayList<Student>(_students.values());
-	} 
+	}
 
-	/** 
+	/**
 	 * @param id
 	 * @return Student with the given id
 	 */
 	public Student getStudent(int id) {
-		return _students.get(id);				
-	} 
+		return _students.get(id);
+	}
 
 	/**
 	 * adds student s to student list
-	 * @param s 
+	 * 
+	 * @param s
 	 */
 	public void addStudent(Student s) {
-		if(_students.size() < MAX_STUDENTS && !_students.containsKey(s.getId()))
+		if (_students.size() < MAX_STUDENTS && !_students.containsKey(s.getId()))
 			_students.put(s.getId(), s);
 	}
 
 	/**
 	 * adds subject 's' to list of subjects
+	 * 
 	 * @param s
 	 */
 	public void addSubject(Subject s) {
-		if (!_subjects.containsKey(s.getName()))
+		if (!_subjects.containsKey(s.getName())) {
 			_subjects.put(s.getName(), s);
+			for (Student rep : _representatives.values())
+				s.registerObserver(rep);
+		}
 	}
 
 	/**
- 	* @param personId
- 	* @return true if person is representative of the course
- 	*/
-	public boolean isRepresentative(int personId){
-		if(_representatives.get(personId) != null)
-			return true;		
+	 * @param personId
+	 * @return true if person is representative of the course
+	 */
+	public boolean isRepresentative(int personId) {
+		if (_representatives.get(personId) != null)
+			return true;
 		else
 			return false;
 	}
 
 	/**
 	 * adds student 's' to representative list
+	 * 
 	 * @param s
 	 */
 	public void addRepresentative(Student s) {
-		if(_representatives.size() < MAX_REPRESENTATIVE)
+		if (_representatives.size() < MAX_REPRESENTATIVE) {
 			_representatives.put(s.getId(), s);
+			for (Subject sub : _subjects.values())
+				sub.registerObserver(s);
+		}
 	}
 
 	/**
 	 * removes student 's' from representative list
+	 * 
 	 * @param s
 	 */
-	public void removeRepresentative(int personId) {		
-			_representatives.remove(personId);
+	public void removeRepresentative(int personId) {
+		_representatives.remove(personId);
 	}
 
-	public int compareTo(Course c){
+	public int compareTo(Course c) {
 		return _name.compareTo(c.getName());
 	}
 
