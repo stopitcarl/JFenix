@@ -1,7 +1,7 @@
 package sth;
 
-import java.io.Serializable;
 
+import java.io.Serializable;
 
 public class ClosedSurveyState extends SurveyState implements Serializable {
     
@@ -9,8 +9,8 @@ public class ClosedSurveyState extends SurveyState implements Serializable {
         super(survey);
     }
 
-    public String getStatus() {
-        return "(fechado)";
+    public String getStatus(SurveyShower shower) {
+        return shower.showClosed(this);
     }
 
     @Override
@@ -29,7 +29,8 @@ public class ClosedSurveyState extends SurveyState implements Serializable {
     }
 
     @Override
-    public void cancel() {
+    public boolean cancel() {
         getSurvey().setState(new OpenSurveyState(getSurvey()));
+        return false;
     }
 }

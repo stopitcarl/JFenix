@@ -8,6 +8,7 @@ import java.util.Map;
 
 import sth.exceptions.IllegalProjectNameException;
 import sth.exceptions.NoSuchProjectNameException;
+import sth.exceptions.SurveyOpeningException;
 
 /**
  * Representation of Subject
@@ -68,7 +69,7 @@ public class Subject implements Serializable{
 	 * @param projectName
 	 * @throws NoSuchProjectNameException
 	 */
-	 public void closeProject(String projectName) throws NoSuchProjectNameException { 
+	 public void closeProject(String projectName) throws NoSuchProjectNameException, SurveyOpeningException { 
 		Project project  = _projects.get(projectName);		
 		
 		if (project != null) {

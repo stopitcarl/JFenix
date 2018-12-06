@@ -200,8 +200,8 @@ public class SchoolManager {
 	 * @param projectName
 	 * @return
 	 */
-	public List<Answer> showSurveyResults(String subjectName, String projectName) {
-		return null;
+	public String showSurveyResults(String subjectName, String projectName) throws IllegalDisciplineException, NoSuchProjectNameException, NoSuchSurveyException {
+		return _school.showSurveyResults(_user.getId(), subjectName, projectName);
 	}
 
 	/**
@@ -213,7 +213,7 @@ public class SchoolManager {
 	 * @throws NoSuchProjectNameException
 	 */
 	public void closeProject(String subjectName, String projectName)
-			throws IllegalDisciplineException, NoSuchProjectNameException {
+			throws IllegalDisciplineException, NoSuchProjectNameException, SurveyOpeningException {
 		_school.closeProject(_user, subjectName, projectName);
 	}
 

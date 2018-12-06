@@ -17,9 +17,9 @@ public abstract class Person implements Serializable {
 	private LinkedList<Notification> _notifications;
 
 	/**
-	 * @param id Person identifier
-	 * @param name Person's name
-	 * @param phoneNumber Person's phone number 
+	 * @param id          Person identifier
+	 * @param name        Person's name
+	 * @param phoneNumber Person's phone number
 	 */
 	public Person(int id, String name, String phoneNum) {
 		_id = id;
@@ -34,6 +34,7 @@ public abstract class Person implements Serializable {
 
 	/**
 	 * Changes person's phone number
+	 * 
 	 * @param newPhoneNum
 	 */
 	public void setPhoneNumber(String newPhoneNum) {
@@ -42,32 +43,32 @@ public abstract class Person implements Serializable {
 
 	/**
 	 * @return Person's phone number
-	 */			
+	 */
 	public String getPhoneNumber() {
 		return _phoneNum;
 	}
 
 	/**
- 	* 
- 	* @return Person's name
- 	*/		
+	 * 
+	 * @return Person's name
+	 */
 	public String getName() {
 		return _name;
 	}
 
-	/**	 
+	/**
 	 * @return Person's identifier
 	 */
 	public int getId() {
 		return _id;
 	}
 
-	/**	 
+	/**
 	 * @return Person's identifier
 	 */
-	public abstract String accept(Visitor v);
-	
-	@Override 
+	public abstract String accept(PersonVisitor v);
+
+	@Override
 	public boolean equals(Object o) {
 		if (o instanceof Person) {
 			Person p = (Person) o;
@@ -76,7 +77,7 @@ public abstract class Person implements Serializable {
 		return false;
 	}
 
-	@Override 
+	@Override
 	public String toString() {
 		return _id + "|" + _phoneNum + "|" + _name;
 	}

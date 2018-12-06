@@ -3,6 +3,7 @@ package sth;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.Serializable;
+import java.rmi.StubNotFoundException;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.util.LinkedList;
@@ -278,7 +279,7 @@ public class School implements Serializable {
 	 * @throws NoSuchProjectNameException
 	 */
 	public void closeProject(Person user, String subjectName, String projectName)
-			throws IllegalDisciplineException, NoSuchProjectNameException {
+			throws IllegalDisciplineException, NoSuchProjectNameException, SurveyOpeningException {
 		Professor prof = getProfessor(user.getId());
 		Subject subject;
 		if ((subject = prof.getDiscipline(subjectName)) == null)
@@ -324,9 +325,9 @@ public class School implements Serializable {
 
 		// Check if subject exists
 		if ((subject = course.getSubject(subjectName)) != null) {
-			if ((project = subject.getProject(projectName)) != null)
+			if ((project = subject.getProject(projectName)) != null && project.isOpen()) {
 				project.createSurvey();
-			else
+			} else
 				throw new NoSuchProjectNameException(projectName, subjectName);
 		} else
 			throw new IllegalDisciplineException(subjectName);
@@ -479,12 +480,12 @@ public class School implements Serializable {
 
 		Course course = student.getCourse();
 		Subject subject = course.getSubject(subjectName);
-
 		if (subject == null)
 			throw new IllegalDisciplineException(subjectName);
 
+		RepresentativeSurveyShower shower = new RepresentativeSurveyShower();
 		for (Project proj : subject.getProjects()) {
-			String surveyStatus = proj.getSurveyStatus();
+			String surveyStatus = proj.getSurveyStatus(shower);
 			if (!surveyStatus.isEmpty())
 				surveys.add(subjectName + " - " + proj.getName() + " " + surveyStatus);
 		}
@@ -492,6 +493,46 @@ public class School implements Serializable {
 		Collections.sort(surveys, Collator.getInstance(Locale.getDefault()));
 
 		return surveys;
+	}
+
+	public String showSurveyResults(int id, String subjectName, String projectName)
+			throws IllegalDisciplineException, NoSuchProjectNameException, NoSuchSurveyException {
+
+		Student student;
+		Professor prof = null;
+		Subject subject;
+		SurveyShower shower;
+		String info = subjectName + " - " + projectName;
+
+		// Initialize object on accordance
+		if ((student = getStudent(id)) != null) {
+			subject = student.getSubject(subjectName);
+			shower = new StudentSurveyShower(student);
+		} else if ((prof = getProfessor(id)) != null) {
+			subject = prof.getSubject(subjectName);
+			shower = new TeacherSurveyShower();
+		} else
+			throw new IllegalArgumentException(subjectName);
+
+		if (subject == null)
+			throw new IllegalDisciplineException(subjectName);
+
+		Project proj = subject.getProject(projectName);
+
+		if (proj == null)
+			throw new NoSuchProjectNameException(projectName, subjectName);
+		shower.setProject(proj);
+
+		if (student != null && !proj.hasSubmission(id))
+			throw new NoSuchProjectNameException(projectName, subjectName);
+
+		String surveyStatus = proj.getSurveyStatus(shower);
+		if (surveyStatus.isEmpty())
+			throw new NoSuchSurveyException();
+
+		info += " " + surveyStatus;
+
+		return info;
 	}
 
 	class PeopleIdSorter implements Comparator<String> {

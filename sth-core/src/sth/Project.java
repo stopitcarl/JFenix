@@ -3,6 +3,7 @@ package sth;
 import java.util.Map;
 import java.util.TreeMap;
 import java.io.Serializable;
+
 import sth.exceptions.TooManySurveysException;
 import sth.exceptions.NoSuchSurveyException;
 import sth.exceptions.SurveyFinishingException;
@@ -51,9 +52,10 @@ public class Project implements Serializable {
 	}
 
 	/** Closes project */
-	public void closeProject() { // TODO: add exceptions
+	public void closeProject() throws SurveyOpeningException{ 
 		_isOpen = false;
-		// openSurvey(); // TODO: uncomment this and look at todo above.. and do it
+		if(_survey != null)
+			_survey.open();
 	}
 
 	public void submitAnswer(int id, String answer) {
@@ -69,6 +71,11 @@ public class Project implements Serializable {
 		return _submissions;
 	}
 
+	/** Get number of submissions */
+	public int getSubmissionSize() {
+		return _submissions.size();
+	}
+
 	public void createSurvey() throws TooManySurveysException {
 		if (_survey != null)
 			throw new TooManySurveysException();
@@ -78,8 +85,8 @@ public class Project implements Serializable {
 
 	public void cancelSurvey() throws NoSuchSurveyException, SurveyCancelingException {
 		if (_survey != null) {
-			_survey.cancel();
-			_survey = null;
+			if(_survey.cancel())
+				_survey = null;
 		} else
 			throw new NoSuchSurveyException();
 	}
@@ -105,10 +112,10 @@ public class Project implements Serializable {
 			throw new NoSuchSurveyException();
 	}
 
-	public String getSurveyStatus() {
+	public String getSurveyStatus(SurveyShower shower) {
 		if (_survey == null)
 			return "";
-		return _survey.getStatus();
+		return _survey.getStatus(shower);
 	}
 
 	public Survey getSurvey() {
