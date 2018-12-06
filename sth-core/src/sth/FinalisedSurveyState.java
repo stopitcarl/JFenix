@@ -14,14 +14,11 @@ public class FinalisedSurveyState extends SurveyState implements Serializable {
         //Do nothing.
     }
 
-    public String getStatus(){
-        Survey survey = getSurvey();
-        String status = "- " + survey.getAnswerSize() + " respostas - "; // 20 respostas - 16 horas
-        status += survey.getAvgHours() + " horas";
-        return status;
+    public String getStatus(SurveyShower shower){        
+        return shower.showFinalised(this);
     }
     
-    public void cancel() throws SurveyFinishingException { 
+    public boolean cancel() throws SurveyFinishingException { 
         throw new SurveyFinishingException();
     }
 }

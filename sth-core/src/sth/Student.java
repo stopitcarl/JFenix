@@ -14,17 +14,17 @@ import java.util.Collections;
  * Representation of Student.
  */
 public class Student extends Person implements Serializable {
-	
-	/** Maximum number of subjects */	
+
+	/** Maximum number of subjects */
 	private static final int MAX_SUBJECTS = 6;
-	/** List of subjects */	
+	/** List of subjects */
 	private Map<String, Subject> _subjects;
 	/** student's course */
 	private Course _course;
 
 	/**
-	 * @param id Person identifier
-	 * @param name Person's name
+	 * @param id          Person identifier
+	 * @param name        Person's name
 	 * @param phoneNumber Person's phone number
 	 */
 	public Student(int id, String name, String phoneNumber) {
@@ -34,6 +34,7 @@ public class Student extends Person implements Serializable {
 
 	/**
 	 * Sets student course to course
+	 * 
 	 * @param course
 	 */
 	public void setCourse(Course course) {
@@ -42,6 +43,7 @@ public class Student extends Person implements Serializable {
 
 	/**
 	 * adds subject to subjects list
+	 * 
 	 * @param subject
 	 */
 	public void addSubject(Subject subject) {
@@ -61,9 +63,9 @@ public class Student extends Person implements Serializable {
 	 * @param course
 	 * @return List sorted strings with course - class pair
 	 */
-	public List<String> getClasses() {		
+	public List<String> getClasses() {
 		ArrayList<String> classes = new ArrayList<String>(_subjects.keySet().size());
-		for(String sub : _subjects.keySet())
+		for (String sub : _subjects.keySet())
 			classes.add("* " + _course.getName() + " - " + sub);
 
 		return classes;
@@ -73,39 +75,24 @@ public class Student extends Person implements Serializable {
 	 * @param subject
 	 * @return true if subject is enrolled in subject
 	 */
-	public boolean isEnrolledIn(Subject subject){		
+	public boolean isEnrolledIn(Subject subject) {
 		return _subjects.containsKey(subject.getName());
 	}
 	
-	/*
-	public List<String> accept(){
 
-	}
-
-	*/
-
-	/**	 
+	/**
 	 * @return Person's string
 	 */
-	public String accept(Visitor v) {
+	public String accept(PersonVisitor v) {
 		return v.showPerson(this);
 	}
 
 	@Override
-	public String toString(){
+	public String toString() {
 		if (_course.isRepresentative(this.getId()))
 			return "DELEGADO|" + super.toString();
 		else
 			return "ALUNO|" + super.toString();
 	}
 	
-	/*
-	 * public void submitSurv(Answer answer, Survey s) {
-	 * 
-	 * }
-	 * 
-	 * public void submitProj(String answer, Project p) {
-	 * 
-	 * }
-	 */
 }

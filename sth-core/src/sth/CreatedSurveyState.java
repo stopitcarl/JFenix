@@ -13,11 +13,11 @@ public class CreatedSurveyState extends SurveyState implements Serializable {
         getSurvey().setState(new OpenSurveyState(getSurvey()));
     }
 
-    public String getStatus(){
-        return "(por abrir)";
+    public String getStatus(SurveyShower shower){
+        return shower.showCreated(this);
     }
     
-    public void cancel() {
-        // do nothing
+    public boolean cancel() {
+        return true;
     }
 }

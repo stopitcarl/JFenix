@@ -18,7 +18,7 @@ public abstract class SurveyState implements Serializable {
         return _survey;
     }
 
-    public abstract String getStatus();
+    public abstract String getStatus(SurveyShower shower);
 
     public void submit(int id, Answer answer) throws NoSuchSurveyException {
         throw new NoSuchSurveyException();
@@ -36,5 +36,5 @@ public abstract class SurveyState implements Serializable {
         throw new SurveyFinishingException();
     }
 
-    public abstract void cancel() throws SurveyCancelingException;
+    public abstract boolean cancel() throws SurveyCancelingException;
 }

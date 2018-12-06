@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.Set;
 import java.io.Serializable;
 
 import sth.exceptions.SurveyClosingException;
@@ -13,12 +14,11 @@ import sth.exceptions.SurveyFinishingException;
 import sth.exceptions.SurveyCancelingException;
 import sth.exceptions.NoSuchSurveyException;
 
-
 /**
  * Representation of Survey.
  */
 public class Survey implements Serializable {
-	
+
 	/** List of answers */
 	private List<Answer> _answers;
 	/** Set of students who have answered the survey */
@@ -32,16 +32,53 @@ public class Survey implements Serializable {
 		_state = new CreatedSurveyState(this);
 	}
 
-	public String getStatus() {
-		return _state.getStatus();
+	public String getStatus(SurveyShower shower) {
+		return _state.getStatus(shower);
+	}
+
+	public int getMinHours() {
+		if (_answers.isEmpty())
+			return 0;
+		int min = _answers.get(0).getHours();
+		for (Answer ans : _answers)
+			if (ans.getHours() < min)
+				min = ans.getHours();
+		return min;
+	}
+
+	public int getMaxHours() {
+		if (_answers.isEmpty())
+			return 0;
+		int max = _answers.get(0).getHours();
+		for (Answer ans : _answers)
+			if (ans.getHours() > max)
+				max = ans.getHours();
+		return max;
+	}
+
+	public int getAvgHours() {
+		int hours = 0;
+		if (_answers.isEmpty())
+			return 0;
+		for (Answer answer : _answers)
+			hours += answer.getHours();
+		return hours / _answers.size();
+	}
+
+	public int getAnswerSize() {
+		return _answers.size();
+	}
+
+	public List<Answer> getResults() {
+		return _answers;
 	}
 
 	public void setState(SurveyState state) {
 		_state = state;
 	}
 
-	public void cancel() throws SurveyCancelingException {
-		_state.cancel();
+	public boolean cancel() throws SurveyCancelingException {
+		return _state.cancel();
 	}
 
 	public void close() throws SurveyClosingException {
@@ -58,32 +95,14 @@ public class Survey implements Serializable {
 
 	public void submitAnswer(int id, Answer answer) throws NoSuchSurveyException {
 		_state.submit(id, answer);
-		// Keep student from submiting twice
-		if (hasAnswer(id))
-			return;
-		// Add student submission
-		_studentIds.add(id);
-		_answers.add(answer);
 	}
 
-	public boolean hasAnswer(int id){
+	public Set<Integer> getStudents() {
+		return _studentIds;
+	}
+
+	public boolean hasAnswer(int id) {
 		return _studentIds.contains(id);
 	}
 
-	public int getAvgHours(){
-		int hours = 0;
-		if (_answers.isEmpty())
-			return 0;
-		for(Answer answer : _answers)
-			hours +=  answer.getHours();
-		return hours / _answers.size();
-	}
-
-	public int getAnswerSize(){		
-		return _answers.size();
-	}
-
-	public List<Answer> getResults() { 
-		return _answers;
-	}
 }
