@@ -80,7 +80,7 @@ public class Project implements Serializable {
 		if (_survey != null)
 			throw new TooManySurveysException();
 		else
-			_survey = new Survey(s, _name);
+			_survey = new Survey(s, this);
 	}
 
 	public void cancelSurvey() throws NoSuchSurveyException, SurveyCancelingException {
@@ -93,7 +93,10 @@ public class Project implements Serializable {
 
 	public void openSurvey() throws NoSuchSurveyException, SurveyOpeningException {
 		if (_survey != null) {
-			_survey.open();
+			if (isOpen())
+				throw new SurveyOpeningException();
+			else
+				_survey.open();
 		} else
 			throw new NoSuchSurveyException();
 	}

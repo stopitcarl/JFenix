@@ -17,7 +17,7 @@ import sth.exceptions.NoSuchSurveyException;
 /**
  * Representation of Survey.
  */
-public class Survey implements Serializable {
+public class Survey implements Observable, Serializable {
 
 	/** List of answers */
 	private List<Answer> _answers;
@@ -27,16 +27,16 @@ public class Survey implements Serializable {
 	private SurveyState _state;
 	/** Observer to notofy changes */
 	private Observer _observer;
-	/** Name of project */
-	String _projectName;
+	/** Project */
+	Project _project;
 	/** Name of subject */
 	String _subjectName;
 
-	public Survey(Subject s, String projectName) {
+	public Survey(Subject s, Project project) {
 		_answers = new ArrayList<Answer>();
 		_studentIds = new TreeSet<Integer>();
 		_state = new CreatedSurveyState(this);
-		_projectName = projectName;
+		_project = project;
 		_subjectName = s.getName();
 		registerObserver(s);
 	}
@@ -46,7 +46,7 @@ public class Survey implements Serializable {
 	}
 
 	public String getProjectName() {
-		return _projectName;
+		return _project.getName();
 	}
 
 	public String getSubjectName() {
