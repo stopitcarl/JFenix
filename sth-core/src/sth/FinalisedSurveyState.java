@@ -4,10 +4,11 @@ import java.io.Serializable;
 import sth.exceptions.SurveyFinishingException;
 
 public class FinalisedSurveyState extends SurveyState implements Serializable {
+    
     public FinalisedSurveyState(Survey survey) {
         super(survey);
         survey.notifyObservers("Resultados do inquérito do projecto " + survey.getProjectName()  
-        + " disciplina " + survey.getSubjectName() );
+        + " da disciplina " + survey.getSubjectName() );
     }
 
     @Override

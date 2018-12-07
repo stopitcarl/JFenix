@@ -29,8 +29,6 @@ import sth.exceptions.SurveyOpeningException;
 import sth.exceptions.SurveyClosingException;
 import sth.exceptions.SurveyFinishingException;
 
-// TODO: search people and retrieve peopel by id, not by object
-
 /**
  * School implementation.
  */
@@ -315,10 +313,9 @@ public class School implements Serializable {
 	public void createSurvey(int id, String subjectName, String projectName)
 			throws IllegalDisciplineException, NoSuchProjectNameException, TooManySurveysException {
 		Student student = getStudent(id);
-		
 
-		if (!isRepresentative(id) && student != null)
-			return; 
+		if (!isRepresentative(id) || student == null)
+			return;
 
 		Course course = student.getCourse();
 		Subject subject;
@@ -338,8 +335,8 @@ public class School implements Serializable {
 			NoSuchProjectNameException, NoSuchSurveyException, SurveyCancelingException {
 		Student student = getStudent(id);
 
-		if (!isRepresentative(id) && student != null)
-			return; // TODO: consider this situation more carefully
+		if (!isRepresentative(id) || student == null)
+			return; 
 
 		Course course = student.getCourse();
 		Subject subject;
@@ -359,8 +356,8 @@ public class School implements Serializable {
 			NoSuchProjectNameException, NoSuchSurveyException, SurveyOpeningException {
 		Student student = getStudent(id);
 
-		if (!isRepresentative(id) && student != null)
-			return; // TODO: consider this situation more carefully
+		if (!isRepresentative(id) || student == null)
+			return;
 
 		Course course = student.getCourse();
 		Subject subject;
@@ -368,7 +365,7 @@ public class School implements Serializable {
 
 		// Check if subject exists
 		if ((subject = course.getSubject(subjectName)) != null) {
-			if ((project = subject.getProject(projectName)) != null) {
+			if ((project = subject.getProject(projectName)) != null) {				
 				project.openSurvey();
 			} else
 				throw new NoSuchProjectNameException(projectName, subjectName);
@@ -380,8 +377,8 @@ public class School implements Serializable {
 			NoSuchProjectNameException, NoSuchSurveyException, SurveyClosingException {
 		Student student = getStudent(id);
 
-		if (!isRepresentative(id) && student != null)
-			return; // TODO: consider this situation more carefully
+		if (!isRepresentative(id) || student == null)
+			return;
 
 		Course course = student.getCourse();
 		Subject subject;
@@ -401,8 +398,8 @@ public class School implements Serializable {
 			NoSuchProjectNameException, NoSuchSurveyException, SurveyFinishingException {
 		Student student = getStudent(id);
 
-		if (!isRepresentative(id) && student != null)
-			return; // TODO: consider this situation more carefully
+		if (!isRepresentative(id) || student == null)
+			return;
 
 		Course course = student.getCourse();
 		Subject subject;
@@ -511,7 +508,7 @@ public class School implements Serializable {
 			shower = new StudentSurveyShower(student);
 		} else if ((prof = getProfessor(id)) != null) {
 			subject = prof.getSubject(subjectName);
-			shower = new TeacherSurveyShower();
+			shower = new ProfessorSurveyShower();
 		} else
 			throw new IllegalArgumentException(subjectName);
 
@@ -531,7 +528,7 @@ public class School implements Serializable {
 		if (surveyStatus.isEmpty())
 			throw new NoSuchSurveyException();
 
-		info += " " + surveyStatus;
+		info += surveyStatus;
 
 		return info;
 	}

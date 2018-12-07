@@ -4,15 +4,15 @@ public abstract class SurveyShower {
     private Project _project;
 
     public String showOpen(SurveyState s) {
-        return "(aberto)";
+        return " (aberto)";
     }
 
     public String showClosed(SurveyState s) {
-        return "(fechado)";
+        return " (fechado)";
     }
 
     public String showCreated(SurveyState s) {
-        return "(por abrir)";
+        return " (por abrir)";
     }
 
     public abstract String showFinalised(SurveyState s);
