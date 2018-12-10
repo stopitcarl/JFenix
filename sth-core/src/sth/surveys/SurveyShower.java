@@ -1,21 +1,23 @@
-package sth;
+package sth.surveys;
+
+import sth.Project;
 
 public abstract class SurveyShower {
     private Project _project;
 
-    public String showOpen(SurveyState s) {
+    public String showOpen(OpenSurveyState s) {
         return " (aberto)";
     }
 
-    public String showClosed(SurveyState s) {
+    public String showClosed(ClosedSurveyState s) {
         return " (fechado)";
     }
 
-    public String showCreated(SurveyState s) {
+    public String showCreated(CreatedSurveyState s) {
         return " (por abrir)";
     }
 
-    public abstract String showFinalised(SurveyState s);
+    public abstract String showFinalised(FinalisedSurveyState s);
 
     public Project getProject() {
         return _project;

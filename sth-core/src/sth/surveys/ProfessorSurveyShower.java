@@ -1,9 +1,10 @@
-package sth;
+package sth.surveys;
+
 
 public class ProfessorSurveyShower extends SurveyShower {
 
     @Override
-    public String showFinalised(SurveyState s) {
+    public String showFinalised(FinalisedSurveyState s) {
         Survey survey = s.getSurvey();
 
         String status = "\n * Número de submissões: " + getSubmissionSize() + "\n";

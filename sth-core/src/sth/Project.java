@@ -4,6 +4,9 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.io.Serializable;
 
+import sth.surveys.Survey;
+import sth.surveys.SurveyShower;
+
 import sth.exceptions.TooManySurveysException;
 import sth.exceptions.NoSuchSurveyException;
 import sth.exceptions.SurveyFinishingException;

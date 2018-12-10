@@ -17,6 +17,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
+import sth.surveys.Survey;
+import sth.surveys.RepresentativeSurveyShower;
+import sth.surveys.ProfessorSurveyShower;
+import sth.surveys.StudentSurveyShower;
+import sth.surveys.SurveyShower;
+
 import sth.exceptions.BadEntryException;
 import sth.exceptions.NoSuchPersonIdException;
 import sth.exceptions.IllegalDisciplineException;
@@ -336,7 +342,7 @@ public class School implements Serializable {
 		Student student = getStudent(id);
 
 		if (!isRepresentative(id) || student == null)
-			return; 
+			return;
 
 		Course course = student.getCourse();
 		Subject subject;
@@ -365,7 +371,7 @@ public class School implements Serializable {
 
 		// Check if subject exists
 		if ((subject = course.getSubject(subjectName)) != null) {
-			if ((project = subject.getProject(projectName)) != null) {				
+			if ((project = subject.getProject(projectName)) != null) {
 				project.openSurvey();
 			} else
 				throw new NoSuchProjectNameException(projectName, subjectName);
@@ -505,7 +511,7 @@ public class School implements Serializable {
 		// Initialize object on accordance
 		if ((student = getStudent(id)) != null) {
 			subject = student.getSubject(subjectName);
-			shower = new StudentSurveyShower(student);
+			shower = new StudentSurveyShower();
 		} else if ((prof = getProfessor(id)) != null) {
 			subject = prof.getSubject(subjectName);
 			shower = new ProfessorSurveyShower();

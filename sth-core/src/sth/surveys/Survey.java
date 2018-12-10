@@ -1,4 +1,4 @@
-package sth;
+package sth.surveys;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -7,6 +7,12 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Set;
 import java.io.Serializable;
+
+import sth.Answer;
+import sth.Project;
+import sth.Observable;
+import sth.Observer;
+import sth.Subject;
 
 import sth.exceptions.SurveyClosingException;
 import sth.exceptions.SurveyOpeningException;
