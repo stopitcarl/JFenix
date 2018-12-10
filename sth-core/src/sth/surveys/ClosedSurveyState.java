@@ -1,10 +1,9 @@
-package sth;
-
+package sth.surveys;
 
 import java.io.Serializable;
 
 public class ClosedSurveyState extends SurveyState implements Serializable {
-    
+
     public ClosedSurveyState(Survey survey) {
         super(survey);
     }
@@ -20,7 +19,7 @@ public class ClosedSurveyState extends SurveyState implements Serializable {
 
     @Override
     public void close() {
-        //Do nothing.
+        // Do nothing.
     }
 
     @Override

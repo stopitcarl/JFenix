@@ -1,6 +1,9 @@
-package sth;
+package sth.surveys;
 
 import java.io.Serializable;
+
+import sth.Answer;
+
 import sth.exceptions.SurveyClosingException;
 import sth.exceptions.SurveyFinishingException;
 import sth.exceptions.SurveyOpeningException;

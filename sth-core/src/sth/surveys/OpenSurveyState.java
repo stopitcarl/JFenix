@@ -1,6 +1,9 @@
-package sth;
+package sth.surveys;
 
 import java.io.Serializable;
+
+import sth.Answer;
+
 import sth.exceptions.SurveyNotEmptyException;
 
 public class OpenSurveyState extends SurveyState implements Serializable {

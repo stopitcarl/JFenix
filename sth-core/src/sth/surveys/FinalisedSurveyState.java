@@ -1,4 +1,4 @@
-package sth;
+package sth.surveys;
 
 import java.io.Serializable;
 import sth.exceptions.SurveyFinishingException;
